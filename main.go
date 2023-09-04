@@ -14,19 +14,19 @@ func main() {
 	router.GET("login", login)
 	router.GET("logout", logout)
 
-	// Global
+	// Dashboard
 	router.GET("getApps", getApps)
 	router.POST("createApp", createApp)
 	router.DELETE("deleteApp", deleteApp)
 	router.POST("hideApp", hideApp)
 
-	// App-specific
+	// App
 	router.GET("getReleases", getReleases)
 	router.POST("createRelease", createRelease)
 	router.DELETE("deleteRelease", deleteRelease)
 	router.POST("hideRelease", hideRelease)
 
-	// Release-specific
+	// Release
 	router.GET("getReleaseNotesTXT",getReleaseNotesTXT)
 	router.GET("getReleaseNotesMD", getReleaseNotesMD)
 	router.GET("getReleaseNotesHTML",getReleaseNotesHTML)
@@ -36,30 +36,3 @@ func main() {
 
 	router.Run(":8000")
 }
-
-// Auth
-func createAccount(c *gin.Context) {}
-func deleteAccount(c *gin.Context) {}
-func updateAccount(c *gin.Context) {}
-func login(c *gin.Context) {}
-func logout(c *gin.Context) {}
-
-// Global
-func getApps(c *gin.Context) {}
-func createApp(c *gin.Context) {}
-func deleteApp(c *gin.Context) {}
-func hideApp(c *gin.Context) {}
-
-// App-specific
-func getReleases(c *gin.Context) {}
-func createRelease(c *gin.Context) {}
-func deleteRelease(c *gin.Context) {}
-func hideRelease(c *gin.Context) {}
-
-// Release-specific
-func getReleaseNotesTXT(c *gin.Context) {}
-func getReleaseNotesMD(c *gin.Context) {}
-func getReleaseNotesHTML(c *gin.Context) {}
-func updateReleaseNotesTXT(c *gin.Context) {}
-func updateReleaseNotesMD(c *gin.Context) {}
-func updateReleaseNotesHTML(c *gin.Context) {}
