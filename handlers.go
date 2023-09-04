@@ -13,13 +13,13 @@ func logout(c *gin.Context) {}
 func getApps(c *gin.Context) {}
 func createApp(c *gin.Context) {}
 func deleteApp(c *gin.Context) {}
-func hideApp(c *gin.Context) {}
+func updateApp(c *gin.Context) {}
 
 // App
 func getReleases(c *gin.Context) {}
 func createRelease(c *gin.Context) {}
 func deleteRelease(c *gin.Context) {}
-func hideRelease(c *gin.Context) {}
+func updateRelease(c *gin.Context) {}
 
 // Release
 func getReleaseNotesTXT(c *gin.Context) {}
