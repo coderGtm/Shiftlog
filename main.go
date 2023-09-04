@@ -9,7 +9,7 @@ func main() {
 	//
 	// Auth
 	router.POST("createAccount", createAccount)
-	router.POST("deleteAccount", deleteAccount)
+	router.DELETE("deleteAccount", deleteAccount)
 	router.POST("updateAccount", updateAccount)
 	router.GET("login", login)
 	router.GET("logout", logout)
@@ -19,6 +19,12 @@ func main() {
 	router.POST("createApp", createApp)
 	router.DELETE("deleteApp", deleteApp)
 	router.POST("hideApp", hideApp)
+
+	// App-specific
+	router.GET("getReleases", getReleases)
+	router.POST("createRelease", createRelease)
+	router.DELETE("deleteRelease", deleteRelease)
+	router.POST("hideRelease", hideRelease)
 
 	router.Run("localhost:8000")
 }
@@ -35,3 +41,9 @@ func getApps(c *gin.Context) {}
 func createApp(c *gin.Context) {}
 func deleteApp(c *gin.Context) {}
 func hideApp(c *gin.Context) {}
+
+// App-specific
+func getReleases(c *gin.Context) {}
+func createRelease(c *gin.Context) {}
+func deleteRelease(c *gin.Context) {}
+func hideRelease(c *gin.Context) {}
