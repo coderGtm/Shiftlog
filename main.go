@@ -34,7 +34,7 @@ func main() {
 	router.POST("updateReleaseNotesMD",updateReleaseNotesMD)
 	router.POST("updateReleaseNotesHTML",updateReleaseNotesHTML)
 
-	router.Run("localhost:8000")
+	router.Run(":8000")
 }
 
 // Auth
@@ -42,7 +42,7 @@ func createAccount(c *gin.Context) {}
 func deleteAccount(c *gin.Context) {}
 func updateAccount(c *gin.Context) {}
 func login(c *gin.Context) {}
-func logout (c *gin.Context) {}
+func logout(c *gin.Context) {}
 
 // Global
 func getApps(c *gin.Context) {}
