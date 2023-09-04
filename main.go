@@ -26,6 +26,14 @@ func main() {
 	router.DELETE("deleteRelease", deleteRelease)
 	router.POST("hideRelease", hideRelease)
 
+	// Release-specific
+	router.GET("getReleaseNotesTXT",getReleaseNotesTXT)
+	router.GET("getReleaseNotesMD", getReleaseNotesMD)
+	router.GET("getReleaseNotesHTML",getReleaseNotesHTML)
+	router.POST("updateReleaseNotesTXT",updateReleaseNotesTXT)
+	router.POST("updateReleaseNotesMD",updateReleaseNotesMD)
+	router.POST("updateReleaseNotesHTML",updateReleaseNotesHTML)
+
 	router.Run("localhost:8000")
 }
 
@@ -47,3 +55,11 @@ func getReleases(c *gin.Context) {}
 func createRelease(c *gin.Context) {}
 func deleteRelease(c *gin.Context) {}
 func hideRelease(c *gin.Context) {}
+
+// Release-specific
+func getReleaseNotesTXT(c *gin.Context) {}
+func getReleaseNotesMD(c *gin.Context) {}
+func getReleaseNotesHTML(c *gin.Context) {}
+func updateReleaseNotesTXT(c *gin.Context) {}
+func updateReleaseNotesMD(c *gin.Context) {}
+func updateReleaseNotesHTML(c *gin.Context) {}
