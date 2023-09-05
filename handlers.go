@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 // Auth
 func createAccount(c *gin.Context) {
 	// get sanatized parameters
