@@ -1,9 +1,32 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+)
+
 
 // Auth
-func createAccount(c *gin.Context) {}
+func createAccount(c *gin.Context) {
+	// get sanatized parameters
+	username := htmlStripper.Sanitize(c.PostForm("username"))
+	password := htmlStripper.Sanitize(c.PostForm("password"))
+	
+	// check for empty params
+	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check is username already used
+	if checkUsernameExists(username) {
+		c.IndentedJSON(http.StatusConflict, "Username Already Exists")
+		return
+	}
+	
+}
 func deleteAccount(c *gin.Context) {}
 func updateAccount(c *gin.Context) {}
 func login(c *gin.Context) {}
