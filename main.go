@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/microcosm-cc/bluemonday"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/joho/godotenv"
 )
 var db *sql.DB
 var dbErr error
@@ -17,6 +18,8 @@ func main() {
 	defer db.Close()
 
 	htmlStripper = bluemonday.StrictPolicy()
+	err := godotenv.Load(".env")
+	checkErr(err)
 
 	router := gin.Default()
 
