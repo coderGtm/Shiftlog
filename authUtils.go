@@ -1,7 +1,7 @@
 package main
 
 import (
-
+	"database/sql"
 	"os"
 	"strconv"
 	"time"
@@ -17,16 +17,18 @@ type createAccountSuccessResponse struct {
 }
 
 func checkUsernameExists(uname string) bool {
-	stmnt, err := db.Prepare("SELECT * FROM USER WHERE username = ?")
-	checkErr(err)
+	sqlStmt := `SELECT username FROM USER WHERE username = ?`
+    err := db.QueryRow(sqlStmt, uname).Scan(&uname)
+    if err != nil {
+        if err != sql.ErrNoRows {
+            // a real error happened!
+			checkErr(err)
+        }
 
-	res, err := stmnt.Exec(uname)
-	checkErr(err)
+        return false
+    }
 
-	affect, err := res.RowsAffected()
-	checkErr(err)
-
-	return affect > 0
+    return true
 }
 
 func registerNewUser(uname string, pswd string) (int64, string) {
