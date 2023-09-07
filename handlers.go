@@ -33,9 +33,43 @@ func createAccount(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusOK, data)
 }
+
 func deleteAccount(c *gin.Context) {}
 func updateAccount(c *gin.Context) {}
-func login(c *gin.Context) {}
+
+
+func login(c *gin.Context) {
+	// get sanatized parameters
+	username := htmlStripper.Sanitize(c.PostForm("username"))
+	password := htmlStripper.Sanitize(c.PostForm("password"))
+	
+	// check for empty params
+	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check if username exists
+	if !checkUsernameExists(username) {
+		c.IndentedJSON(http.StatusConflict, "Username does not exist!")
+		return
+	}
+	
+	authenticated, authToken := verifyAndLogin(username, password)
+	
+	if !authenticated {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid login credentials!")
+		return
+	} else {
+		data := loginSuccessResponse {
+			AuthToken: authToken,
+		}
+		c.IndentedJSON(http.StatusOK, data)
+		return
+	}
+}
+
+
 func logout(c *gin.Context) {}
 
 // Dashboard
