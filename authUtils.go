@@ -153,3 +153,11 @@ func isTokenValid(token string) (uint, bool) {
 	}
 	return 0, false
 }
+
+func logoutUser(userId uint) {
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	stmnt, err := db.Prepare("UPDATE USER SET authToken = NULL, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	_, err = stmnt.Exec(currentTimeStamp, userId)
+	checkErr(err)
+}

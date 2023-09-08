@@ -79,10 +79,24 @@ func login(c *gin.Context) {
 	}
 }
 
-func logout(c *gin.Context) {}
+func logout(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+	logoutUser(userId)
+	c.IndentedJSON(http.StatusOK, "Logged out!")
+}
 
 // Dashboard
 func getApps(c *gin.Context) {}
+
 func createApp(c *gin.Context) {
 	authToken := extractAuthToken(c)
 	if authToken == "" {
