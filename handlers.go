@@ -24,10 +24,9 @@ func createAccount(c *gin.Context) {
 		c.IndentedJSON(http.StatusConflict, "Username Already Exists")
 		return
 	}
-	newUserId, authToken := registerNewUser(username, password)
+	authToken := registerNewUser(username, password)
 
 	data := createAccountSuccessResponse {
-		Id: newUserId,
 		Username: username,
 		AuthToken: authToken,
 	}

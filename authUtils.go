@@ -11,7 +11,6 @@ import (
 )
 
 type createAccountSuccessResponse struct {
-	Id int64 `json:"id"`
 	Username string `json:"username"`
 	AuthToken string `json:"authToken"`
 }
@@ -34,7 +33,7 @@ func checkUsernameExists(uname string) bool {
     return true
 }
 
-func registerNewUser(uname string, pswd string) (int64, string) {
+func registerNewUser(uname string, pswd string) string {
 	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
 	hashedPasswordString := hashPasswordString(pswd)
 	stmnt, err := db.Prepare("INSERT INTO USER(username, password, createdAt, updatedAt) values(?,?,?,?);")
@@ -48,7 +47,7 @@ func registerNewUser(uname string, pswd string) (int64, string) {
 	checkErr(err)
 	_, err = stmnt.Exec(authToken, id)
 	checkErr(err)
-	return id, authToken
+	return authToken
 }
 
 func hashPasswordString(s string) string {
