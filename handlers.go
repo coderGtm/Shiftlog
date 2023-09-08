@@ -103,6 +103,11 @@ func createApp(c *gin.Context) {
 		return
 	}
 
+	if strings.Trim(appName, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty app Name is not allowed.")
+		return
+	}
+
 	appId, appName, appHidden := createAppForUser(int(userId), appName)
 	data := userApp {
 		Id: appId,
