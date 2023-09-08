@@ -2,16 +2,19 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type createAccountSuccessResponse struct {
-	Username string `json:"username"`
+	Username  string `json:"username"`
 	AuthToken string `json:"authToken"`
 }
 type loginSuccessResponse struct {
@@ -20,17 +23,17 @@ type loginSuccessResponse struct {
 
 func checkUsernameExists(uname string) bool {
 	sqlStmt := `SELECT username FROM USER WHERE username = ?`
-    err := db.QueryRow(sqlStmt, uname).Scan(&uname)
-    if err != nil {
-        if err != sql.ErrNoRows {
-            // a real error happened!
+	err := db.QueryRow(sqlStmt, uname).Scan(&uname)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened!
 			checkErr(err)
-        }
+		}
 
-        return false
-    }
+		return false
+	}
 
-    return true
+	return true
 }
 
 func registerNewUser(uname string, pswd string) string {
@@ -51,7 +54,7 @@ func registerNewUser(uname string, pswd string) string {
 }
 
 func hashPasswordString(s string) string {
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(s),bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(s), bcrypt.DefaultCost)
 	checkErr(err)
 	hashedPasswordString := string(hashedPassword)
 	return hashedPasswordString
@@ -59,12 +62,12 @@ func hashPasswordString(s string) string {
 
 func createJWT(userId int64) string {
 	secretKey := []byte(os.Getenv("JWT_SECRET_KEY"))
-	token_lifespan,err := strconv.Atoi(os.Getenv("JWT_HOUR_LIFESPAN"))
+	token_lifespan, err := strconv.Atoi(os.Getenv("JWT_HOUR_LIFESPAN"))
 	checkErr(err)
 
-	claims := jwt.MapClaims {
+	claims := jwt.MapClaims{
 		"userId": userId,
-		"exp": time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix(),
+		"exp":    time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix(),
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString(secretKey)
@@ -77,13 +80,13 @@ func verifyAndLogin(uname string, pswd string) (bool, string) {
 	var userId int64
 	err := db.QueryRow("SELECT id, password from USER WHERE username = ?;", uname).Scan(&userId, &hashedPassword)
 	if err != nil {
-        if err != sql.ErrNoRows {
-            // a real error happened!
+		if err != sql.ErrNoRows {
+			// a real error happened!
 			checkErr(err)
-        }
+		}
 		// record does not exist
-        return false, ""
-    }
+		return false, ""
+	}
 	// record exists
 	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(pswd)) == nil {
 		// password correct
@@ -92,7 +95,61 @@ func verifyAndLogin(uname string, pswd string) (bool, string) {
 		checkErr(err)
 		_, err = stmnt.Exec(authToken, userId)
 		checkErr(err)
+		stmnt.Close()
 		return true, authToken
 	}
 	return false, ""
+}
+
+func extractAuthToken(c *gin.Context) string {
+	token := c.Query("authToken")
+	if token != "" { return token }
+	bearerToken := c.Request.Header.Get("Authorization")
+	if len(strings.Split(bearerToken, "")) == 2 {
+		return strings.Split(bearerToken, " ")[1]
+	}
+	return ""
+}
+
+func extractUserIdFromToken(tokenString string) (uint, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(os.Getenv("JWT_SECRET_KEY")), nil
+	})
+	if err != nil {
+		return 0, err
+	}
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if ok && token.Valid {
+		uid, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims["userId"]), 10, 32)
+		if err != nil {
+			return 0, err
+		}
+		return uint(uid), nil
+	}
+	return 0, nil
+}
+
+func isTokenValid(token string) (uint, bool) {
+	// extract user id from token and check if token matches the one in db. Returns user id also
+	userId, validationErr := extractUserIdFromToken(token)
+	if validationErr == nil {
+		var dbToken string
+		err := db.QueryRow("SELECT authToken from USER WHERE id = ?;", userId).Scan(&dbToken)
+		if err != nil {
+			if err != sql.ErrNoRows {
+				// a real error happened!
+				checkErr(err)
+			}
+			// record does not exist
+			return 0, false
+		}
+		// record exists
+		if token == dbToken {
+			return userId, true
+		}
+	}
+	return 0, false
 }

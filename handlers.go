@@ -12,7 +12,7 @@ func createAccount(c *gin.Context) {
 	// get sanatized parameters
 	username := htmlStripper.Sanitize(c.PostForm("username"))
 	password := htmlStripper.Sanitize(c.PostForm("password"))
-	
+
 	// check for empty params
 	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
 		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
@@ -26,8 +26,8 @@ func createAccount(c *gin.Context) {
 	}
 	authToken := registerNewUser(username, password)
 
-	data := createAccountSuccessResponse {
-		Username: username,
+	data := createAccountSuccessResponse{
+		Username:  username,
 		AuthToken: authToken,
 	}
 	c.IndentedJSON(http.StatusOK, data)
@@ -36,12 +36,11 @@ func createAccount(c *gin.Context) {
 func deleteAccount(c *gin.Context) {}
 func updateAccount(c *gin.Context) {}
 
-
 func login(c *gin.Context) {
 	// get sanatized parameters
 	username := htmlStripper.Sanitize(c.PostForm("username"))
 	password := htmlStripper.Sanitize(c.PostForm("password"))
-	
+
 	// check for empty params
 	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
 		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
@@ -53,14 +52,14 @@ func login(c *gin.Context) {
 		c.IndentedJSON(http.StatusConflict, "Username does not exist!")
 		return
 	}
-	
+
 	authenticated, authToken := verifyAndLogin(username, password)
-	
+
 	if !authenticated {
 		c.IndentedJSON(http.StatusUnauthorized, "Invalid login credentials!")
 		return
 	} else {
-		data := loginSuccessResponse {
+		data := loginSuccessResponse{
 			AuthToken: authToken,
 		}
 		c.IndentedJSON(http.StatusOK, data)
@@ -68,25 +67,34 @@ func login(c *gin.Context) {
 	}
 }
 
-
 func logout(c *gin.Context) {}
 
 // Dashboard
 func getApps(c *gin.Context) {}
-func createApp(c *gin.Context) {}
+func createApp(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+	}
+	
+}
 func deleteApp(c *gin.Context) {}
 func updateApp(c *gin.Context) {}
 
 // App
-func getReleases(c *gin.Context) {}
+func getReleases(c *gin.Context)   {}
 func createRelease(c *gin.Context) {}
 func deleteRelease(c *gin.Context) {}
 func updateRelease(c *gin.Context) {}
 
 // Release
-func getReleaseNotesTXT(c *gin.Context) {}
-func getReleaseNotesMD(c *gin.Context) {}
-func getReleaseNotesHTML(c *gin.Context) {}
-func updateReleaseNotesTXT(c *gin.Context) {}
-func updateReleaseNotesMD(c *gin.Context) {}
+func getReleaseNotesTXT(c *gin.Context)     {}
+func getReleaseNotesMD(c *gin.Context)      {}
+func getReleaseNotesHTML(c *gin.Context)    {}
+func updateReleaseNotesTXT(c *gin.Context)  {}
+func updateReleaseNotesMD(c *gin.Context)   {}
 func updateReleaseNotesHTML(c *gin.Context) {}
