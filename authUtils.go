@@ -90,10 +90,11 @@ func verifyAndLogin(uname string, pswd string) (bool, string) {
 	// record exists
 	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(pswd)) == nil {
 		// password correct
+		currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
 		authToken := createJWT(userId)
-		stmnt, err := db.Prepare("UPDATE USER SET authToken = ? WHERE id = ?;")
+		stmnt, err := db.Prepare("UPDATE USER SET authToken = ?, updatedAt = ? WHERE id = ?;")
 		checkErr(err)
-		_, err = stmnt.Exec(authToken, userId)
+		_, err = stmnt.Exec(authToken, currentTimeStamp, userId)
 		checkErr(err)
 		stmnt.Close()
 		return true, authToken
