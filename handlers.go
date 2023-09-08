@@ -19,6 +19,12 @@ func createAccount(c *gin.Context) {
 		return
 	}
 
+	// check for illegal params
+	if username != c.PostForm("username") || password != c.PostForm("password") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal username or password!")
+		return
+	}
+
 	// check is username already used
 	if checkUsernameExists(username) {
 		c.IndentedJSON(http.StatusConflict, "Username Already Exists")
@@ -44,6 +50,12 @@ func login(c *gin.Context) {
 	// check for empty params
 	if strings.Trim(username, " ") == "" || strings.Trim(password, " ") == "" {
 		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check for illegal params
+	if username != c.PostForm("username") || password != c.PostForm("password") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal username or password!")
 		return
 	}
 
@@ -75,17 +87,20 @@ func createApp(c *gin.Context) {
 	authToken := extractAuthToken(c)
 	if authToken == "" {
 		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
 	}
 	userId, validToken := isTokenValid(authToken)
 	if !validToken {
 		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
 	}
 
 	// get input name
 	appName := htmlStripper.Sanitize(c.PostForm("appName"))
 
 	if appName != c.PostForm("appName") {
-		c.IndentedJSON(http.StatusBadRequest, "Invalid app Name")
+		c.IndentedJSON(http.StatusBadRequest, "Illegal app Name")
+		return
 	}
 
 	appId, appName, appHidden := createAppForUser(int(userId), appName)
