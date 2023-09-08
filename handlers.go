@@ -80,7 +80,21 @@ func createApp(c *gin.Context) {
 	if !validToken {
 		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
 	}
-	
+
+	// get input name
+	appName := htmlStripper.Sanitize(c.PostForm("appName"))
+
+	if appName != c.PostForm("appName") {
+		c.IndentedJSON(http.StatusBadRequest, "Invalid app Name")
+	}
+
+	appId, appName, appHidden := createAppForUser(int(userId), appName)
+	data := userApp {
+		Id: appId,
+		Name: appName,
+		Hidden: appHidden,
+	}
+	c.IndentedJSON(http.StatusOK, data)
 }
 func deleteApp(c *gin.Context) {}
 func updateApp(c *gin.Context) {}
