@@ -162,3 +162,10 @@ func logoutUser(userId uint) {
 	_, err = stmnt.Exec(currentTimeStamp, userId)
 	checkErr(err)
 }
+
+func deleteUserAccount(userId uint) bool {
+	stmnt, err := db.Prepare("DELETE FROM user WHERE id = ?")
+	checkErr(err)
+	_, err = stmnt.Exec(userId)
+	return err != nil
+}

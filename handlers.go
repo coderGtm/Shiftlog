@@ -39,7 +39,22 @@ func createAccount(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, data)
 }
 
-func deleteAccount(c *gin.Context) {}
+func deleteAccount(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	if deleteUserAccount(userId) {
+		c.IndentedJSON(http.StatusOK, "User Account Deleted Successfully!")
+	}
+}
 func updateAccount(c *gin.Context) {}
 
 func login(c *gin.Context) {
