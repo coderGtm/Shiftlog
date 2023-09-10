@@ -50,10 +50,8 @@ func deleteAccount(c *gin.Context) {
 		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
 		return
 	}
-
-	if deleteUserAccount(userId) {
-		c.IndentedJSON(http.StatusOK, "User Account Deleted Successfully!")
-	}
+	deleteUserAccount(userId)
+	c.IndentedJSON(http.StatusOK, "User Account Deleted Successfully!")
 }
 func updateAccount(c *gin.Context) {}
 
