@@ -16,6 +16,8 @@ func main() {
 	db, dbErr = sql.Open("sqlite3", "development.db")
 	checkErr(dbErr)
 	defer db.Close()
+	_, dbErr = db.Exec("PRAGMA foreign_keys = ON;")
+	checkErr(dbErr)
 
 	htmlStripper = bluemonday.StrictPolicy()
 	err := godotenv.Load(".env")
