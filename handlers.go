@@ -95,7 +95,21 @@ func logout(c *gin.Context) {
 }
 
 // Dashboard
-func getApps(c *gin.Context) {}
+func getApps(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	apps := getAppsOfUser(userId)
+	c.IndentedJSON(http.StatusOK, apps)
+}
 
 func createApp(c *gin.Context) {
 	authToken := extractAuthToken(c)
@@ -122,13 +136,8 @@ func createApp(c *gin.Context) {
 		return
 	}
 
-	appId, appName, appHidden := createAppForUser(int(userId), appName)
-	data := userApp {
-		Id: appId,
-		Name: appName,
-		Hidden: appHidden,
-	}
-	c.IndentedJSON(http.StatusOK, data)
+	app := createAppForUser(int(userId), appName)
+	c.IndentedJSON(http.StatusOK, app)
 }
 func deleteApp(c *gin.Context) {}
 func updateApp(c *gin.Context) {}
