@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -152,7 +153,37 @@ func createApp(c *gin.Context) {
 	app := createAppForUser(int(userId), appName)
 	c.IndentedJSON(http.StatusOK, app)
 }
-func deleteApp(c *gin.Context) {}
+func deleteApp(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get input id
+	appId := htmlStripper.Sanitize(c.PostForm("appId"))
+
+	if appId != c.PostForm("appId") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal app Id")
+		return
+	}
+	intAppId, err := strconv.Atoi(appId); 
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "appId must be an Integer.")
+		return
+	}
+	if isAppOfUser(intAppId, int(userId)) {
+		deleteUserApp(userId, uint(intAppId))
+		c.IndentedJSON(http.StatusOK, "App deleted successfully!")
+		return
+	}
+	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized deletion!")
+}
 func updateApp(c *gin.Context) {}
 
 // App

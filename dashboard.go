@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -42,4 +43,29 @@ func createAppForUser(userId int, appName string) userApp {
 	return userApp{
 		int(appId), appName, false, currentTimeStamp, currentTimeStamp,
 	}
+}
+
+func isAppOfUser(appId int, userId int) bool {
+	var dbUserId int
+		err := db.QueryRow("SELECT userId from APP WHERE id = ?;", appId).Scan(&dbUserId)
+		if err != nil {
+			if err != sql.ErrNoRows {
+				// a real error happened!
+				checkErr(err)
+			}
+			// record does not exist
+			return false
+		}
+		// record exists
+		if userId == dbUserId {
+			return true
+		}
+		return false
+}
+
+func deleteUserApp(userId uint, appId uint) {
+	stmnt, err := db.Prepare("DELETE FROM user WHERE id = ?")
+	checkErr(err)
+	_, err = stmnt.Exec(userId)
+	checkErr(err)
 }
