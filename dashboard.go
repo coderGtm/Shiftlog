@@ -84,7 +84,7 @@ func deleteUserApp(userId uint, appId uint) {
 
 func isReleaseAlreadyPresent(appId int, versionCode int) bool {
 	var releaseId int
-	err := db.QueryRow("SELECT id FROM release WHERE appId = ?, versionCode = ?", appId, versionCode).Scan(&releaseId)
+	err := db.QueryRow("SELECT id FROM release WHERE appId = ? AND versionCode = ?", appId, versionCode).Scan(&releaseId)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			// a real error happened!
