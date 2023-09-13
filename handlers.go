@@ -172,7 +172,7 @@ func deleteApp(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal app Id")
 		return
 	}
-	intAppId, err := strconv.Atoi(appId); 
+	intAppId, err := strconv.Atoi(appId)
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, "appId must be an Integer.")
 		return
@@ -187,7 +187,7 @@ func deleteApp(c *gin.Context) {
 func updateApp(c *gin.Context) {}
 
 // App
-func getReleases(c *gin.Context)   {
+func getReleases(c *gin.Context) {
 	authToken := extractAuthToken(c)
 	if authToken == "" {
 		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
@@ -200,12 +200,12 @@ func getReleases(c *gin.Context)   {
 	}
 	// get input id
 	appId := htmlStripper.Sanitize(c.Query("appId"))
-	
+
 	if appId != c.Query("appId") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal app Id")
 		return
 	}
-	i_appId, err := strconv.Atoi(appId); 
+	i_appId, err := strconv.Atoi(appId)
 	if err != nil {
 		c.IndentedJSON(http.StatusBadRequest, "App ID must be an Integer.")
 		return
@@ -271,9 +271,9 @@ func deleteRelease(c *gin.Context) {}
 func updateRelease(c *gin.Context) {}
 
 // Release
-func getReleaseNotesTXT(c *gin.Context)     {}
-func getReleaseNotesMD(c *gin.Context)      {}
-func getReleaseNotesHTML(c *gin.Context)    {}
-func updateReleaseNotesTXT(c *gin.Context)  {}
-func updateReleaseNotesMD(c *gin.Context)   {}
-func updateReleaseNotesHTML(c *gin.Context) {}
+func getReleaseNotesTxt(c *gin.Context)     {}
+func getReleaseNotesMd(c *gin.Context)      {}
+func getReleaseNotesHtml(c *gin.Context)    {}
+func updateReleaseNotesTxt(c *gin.Context)  {}
+func updateReleaseNotesMd(c *gin.Context)   {}
+func updateReleaseNotesHtml(c *gin.Context) {}
