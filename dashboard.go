@@ -109,3 +109,21 @@ func createReleaseForApp(userId int, appId int, versionCode int, versionName str
 		int(releaseId), appId, versionCode, versionName, "", "", "", false, currentTimeStamp, currentTimeStamp,
 	}
 }
+
+func getReleasesOfApp(appId int) []*appRelease {
+	releases := make([]*appRelease, 0)
+	rows, err := db.Query("SELECT id, versionCode, versionName, hidden, createdAt, updatedAt from release WHERE appId = ?", appId)
+	checkErr(err)
+	defer rows.Close()
+
+	for rows.Next() {
+		release := new(appRelease)
+		err := rows.Scan(&release.Id, &release.VersionCode, &release.VersionName, &release.Hidden, &release.CreatedAt, &release.UpdatedAt)
+		checkErr(err)
+		releases = append(releases, release)
+	}
+	err = rows.Err()
+	checkErr(err)
+
+	return releases
+}

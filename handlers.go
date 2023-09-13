@@ -187,7 +187,37 @@ func deleteApp(c *gin.Context) {
 func updateApp(c *gin.Context) {}
 
 // App
-func getReleases(c *gin.Context)   {}
+func getReleases(c *gin.Context)   {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+	// get input id
+	appId := htmlStripper.Sanitize(c.Query("appId"))
+	
+	if appId != c.Query("appId") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal app Id")
+		return
+	}
+	i_appId, err := strconv.Atoi(appId); 
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "App ID must be an Integer.")
+		return
+	}
+
+	if isAppOfUser(i_appId, int(userId)) {
+		releases := getReleasesOfApp(i_appId)
+		c.IndentedJSON(http.StatusOK, releases)
+		return
+	}
+	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized access!")
+}
 func createRelease(c *gin.Context) {
 	authToken := extractAuthToken(c)
 	if authToken == "" {
