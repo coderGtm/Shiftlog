@@ -12,6 +12,18 @@ type userApp struct {
 	CreatedAt int64 `json:"createdAt"`
 	UpdatedAt int64 `json:"updatedAt"`
 }
+type appRelease struct {
+	Id     int    `json:"id"`
+	AppId  int    `json:"appId"`
+	VersionCode  int    `json:"versionCode"`
+	VersionName  string `json:"versionName"`
+	NotesTxt  string `json:"notesTxt"`
+	NotesMd  string `json:"notesMd"`
+	NotesHtml  string `json:"notesHtml"`
+	Hidden bool `json:"hidden"`
+	CreatedAt int64 `json:"createdAt"`
+	UpdatedAt int64 `json:"updatedAt"`
+}
 
 func getAppsOfUser(userId uint) []*userApp {
 	apps := make([]*userApp, 0)
@@ -68,4 +80,32 @@ func deleteUserApp(userId uint, appId uint) {
 	checkErr(err)
 	_, err = stmnt.Exec(userId)
 	checkErr(err)
+}
+
+func isReleaseAlreadyPresent(appId int, versionCode int) bool {
+	var releaseId int
+	err := db.QueryRow("SELECT id FROM release WHERE appId = ?, versionCode = ?", appId, versionCode).Scan(&releaseId)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened!
+			checkErr(err)
+		}
+		// record does not exist
+		return false
+	}
+	return true
+}
+
+func createReleaseForApp(userId int, appId int, versionCode int, versionName string) appRelease {
+	currentTimeStamp := time.Now().Unix()
+	stmnt, err := db.Prepare("INSERT INTO RELEASE(appId, versionCode, versionName, hidden, createdAt, updatedAt) VALUES(?,?,?,?,?,?);")
+	checkErr(err)
+	res, err := stmnt.Exec(appId, versionCode, versionName, 0, currentTimeStamp, currentTimeStamp)
+	checkErr(err)
+	releaseId, err := res.LastInsertId()
+	checkErr(err)
+
+	return appRelease{
+		int(releaseId), appId, versionCode, versionName, "", "", "", false, currentTimeStamp, currentTimeStamp,
+	}
 }

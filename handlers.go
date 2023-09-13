@@ -188,7 +188,55 @@ func updateApp(c *gin.Context) {}
 
 // App
 func getReleases(c *gin.Context)   {}
-func createRelease(c *gin.Context) {}
+func createRelease(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get inputs
+	appId := htmlStripper.Sanitize(c.PostForm("appId"))
+	versionName := htmlStripper.Sanitize(c.PostForm("versionName"))
+	versionCode := htmlStripper.Sanitize(c.PostForm("versionCode"))
+
+	if appId != c.PostForm("appId") || versionName != c.PostForm("versionName") || versionCode != c.PostForm("versionCode") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal input parameter values")
+		return
+	}
+	i_appId, err := strconv.Atoi(appId)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "App ID must be an integer")
+		return
+	}
+	i_versionCode, err := strconv.Atoi(versionCode)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "Version Code must be an integer")
+		return
+	}
+	if strings.Trim(versionName, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty Version Name is not allowed.")
+		return
+	}
+	if isAppOfUser(i_appId, int(userId)) {
+		if !isReleaseAlreadyPresent(i_appId, i_versionCode) {
+			release := createReleaseForApp(int(userId), i_appId, i_versionCode, versionName)
+			c.IndentedJSON(http.StatusOK, release)
+			return
+		} else {
+			c.IndentedJSON(http.StatusBadRequest, "This Version Code already exists")
+			return
+		}
+	} else {
+		c.IndentedJSON(http.StatusUnauthorized, "Unauthorized Request!")
+		return
+	}
+}
 func deleteRelease(c *gin.Context) {}
 func updateRelease(c *gin.Context) {}
 
