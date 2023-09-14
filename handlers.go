@@ -274,6 +274,4 @@ func updateRelease(c *gin.Context) {}
 func getReleaseNotesTxt(c *gin.Context)     {}
 func getReleaseNotesMd(c *gin.Context)      {}
 func getReleaseNotesHtml(c *gin.Context)    {}
-func updateReleaseNotesTxt(c *gin.Context)  {}
-func updateReleaseNotesMd(c *gin.Context)   {}
-func updateReleaseNotesHtml(c *gin.Context) {}
+func updateReleaseNotes(c *gin.Context)  {}

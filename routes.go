@@ -26,7 +26,5 @@ func setUpRoutes(router *gin.Engine) {
 	router.GET("getReleaseNotesTxt", getReleaseNotesTxt)
 	router.GET("getReleaseNotesMd", getReleaseNotesMd)
 	router.GET("getReleaseNotesHtml", getReleaseNotesHtml)
-	router.POST("updateReleaseNotesTxt", updateReleaseNotesTxt)
-	router.POST("updateReleaseNotesMd", updateReleaseNotesMd)
-	router.POST("updateReleaseNotesHtml", updateReleaseNotesHtml)
+	router.POST("updateReleaseNotesTxt", updateReleaseNotes)
 }
