@@ -301,7 +301,27 @@ func deleteRelease(c *gin.Context) {
 func updateRelease(c *gin.Context) {}
 
 // Release
-func getReleaseNotesTxt(c *gin.Context)     {}
-func getReleaseNotesMd(c *gin.Context)      {}
-func getReleaseNotesHtml(c *gin.Context)    {}
+func getReleaseNotesTxt(c *gin.Context)     {
+	// unprotected endpoint
+
+	// 2 methods, ordered by priority:
+	// 1) Directly by release id
+	// 2) By app id and version code
+
+	releaseId := htmlStripper.Sanitize(c.Query("releaseId"))
+	appId := htmlStripper.Sanitize(c.Query("appId"))
+	versionCode := htmlStripper.Sanitize(c.Query("versionCode"))
+	notesType := htmlStripper.Sanitize(c.Query("type"))
+
+	if releaseId != "" && releaseId != c.Query("releaseId"){
+		releaseId, err := strconv.Atoi(releaseId)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, "Release Id must be an Integer!")
+		}
+	} else if appId != "" && versionCode != "" && appId != c.Query("appId") && versionCode != c.Query("versionCode") {
+
+	} else {
+		c.IndentedJSON(http.StatusBadRequest, "Missing or Illegal parameters")
+	}
+}
 func updateReleaseNotes(c *gin.Context)  {}

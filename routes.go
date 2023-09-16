@@ -24,7 +24,5 @@ func setUpRoutes(router *gin.Engine) {
 
 	// Release
 	router.GET("getReleaseNotesTxt", getReleaseNotesTxt)
-	router.GET("getReleaseNotesMd", getReleaseNotesMd)
-	router.GET("getReleaseNotesHtml", getReleaseNotesHtml)
 	router.POST("updateReleaseNotesTxt", updateReleaseNotes)
 }
