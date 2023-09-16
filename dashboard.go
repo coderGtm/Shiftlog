@@ -127,3 +127,28 @@ func getReleasesOfApp(appId int) []*appRelease {
 
 	return releases
 }
+
+func isReleaseOfUser(releaseId int, userId int) bool {
+	var dbAppId int
+		err := db.QueryRow("SELECT appId from release WHERE id = ?;", releaseId).Scan(&dbAppId)
+		if err != nil {
+			if err != sql.ErrNoRows {
+				// a real error happened!
+				checkErr(err)
+			}
+			// record does not exist
+			return false
+		}
+		// record exists
+		if isAppOfUser(dbAppId, userId) {
+			return true
+		}
+		return false
+}
+
+func deleteAppRelease(releaseId int) {
+	stmnt, err := db.Prepare("DELETE FROM release WHERE id = ?")
+	checkErr(err)
+	_, err = stmnt.Exec(releaseId)
+	checkErr(err)
+}
