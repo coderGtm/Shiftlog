@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -301,27 +302,65 @@ func deleteRelease(c *gin.Context) {
 func updateRelease(c *gin.Context) {}
 
 // Release
-func getReleaseNotesTxt(c *gin.Context)     {
+func getReleaseNotes(c *gin.Context) {
 	// unprotected endpoint
 
 	// 2 methods, ordered by priority:
 	// 1) Directly by release id
-	// 2) By app id and version code
+	// 2) By app id and version code (latest keyword allowed)
 
 	releaseId := htmlStripper.Sanitize(c.Query("releaseId"))
 	appId := htmlStripper.Sanitize(c.Query("appId"))
 	versionCode := htmlStripper.Sanitize(c.Query("versionCode"))
-	notesType := htmlStripper.Sanitize(c.Query("type"))
 
-	if releaseId != "" && releaseId != c.Query("releaseId"){
+	if releaseId != "" {
+		if releaseId != c.Query("releaseId") {
+			c.IndentedJSON(http.StatusBadRequest, "Illegal Release ID")
+			return
+		}
 		releaseId, err := strconv.Atoi(releaseId)
 		if err != nil {
-			c.IndentedJSON(http.StatusBadRequest, "Release Id must be an Integer!")
+			c.IndentedJSON(http.StatusBadRequest, "Release ID must be an Integer!")
+			return
 		}
-	} else if appId != "" && versionCode != "" && appId != c.Query("appId") && versionCode != c.Query("versionCode") {
-
-	} else {
-		c.IndentedJSON(http.StatusBadRequest, "Missing or Illegal parameters")
+		releaseNotes, exists := getReleaseNotesOfRelease(releaseId)
+		if !exists {
+			c.IndentedJSON(http.StatusNotFound, "Release Notes not found!")
+			return
+		}
+		fmt.Print("rel:",releaseNotes)
+		c.IndentedJSON(http.StatusOK, releaseNotes)
+		return
+	} else if appId != "" && versionCode != "" {
+		latestFlag := false
+		if appId != c.Query("appId") || versionCode != c.Query("versionCode") {
+			c.IndentedJSON(http.StatusBadRequest, "Illegal App ID or Version Code")
+			return
+		}
+		appId, err := strconv.Atoi(appId)
+		if err != nil {
+			c.IndentedJSON(http.StatusBadRequest, "App ID must be an Integer!")
+			return
+		}
+		i_versionCode := -1
+		if versionCode == "latest" {
+			latestFlag = true
+		} else {
+			versionCode, err := strconv.Atoi(versionCode)
+			if err != nil {
+				c.IndentedJSON(http.StatusBadRequest, "Invalid Version Code")
+				return
+			}
+			i_versionCode = versionCode
+		}
+		notes, exists := getReleaseNotesByAppIdAndVersionCode(appId, i_versionCode, latestFlag)
+		if !exists {
+			c.IndentedJSON(http.StatusNotFound, "Release Notes not found!")
+			return
+		}
+		c.IndentedJSON(http.StatusOK, notes)
+		return
 	}
+	c.IndentedJSON(http.StatusBadRequest, "Missing Parameters!")
 }
-func updateReleaseNotes(c *gin.Context)  {}
+func updateReleaseNotes(c *gin.Context) {}
