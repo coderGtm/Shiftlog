@@ -23,6 +23,6 @@ func setUpRoutes(router *gin.Engine) {
 	router.POST("updateRelease", updateRelease)
 
 	// Release
-	router.GET("getReleaseNotesTxt", getReleaseNotesTxt)
+	router.GET("getReleaseNotes", getReleaseNotes)
 	router.POST("updateReleaseNotesTxt", updateReleaseNotes)
 }
