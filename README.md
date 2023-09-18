@@ -20,6 +20,9 @@ Each application can have multiple releases, allowing for meticulous version tra
 ### 3. Release Note Formats
 
 release.io supports release notes in three formats: **plain text (txt), Markdown (md), and HTML (html)**. This versatile feature accommodates various documentation preferences.
+
+
+
 ## How It Works:
 
 ### 1. User Registration and Authentication:
@@ -64,7 +67,7 @@ Individual developers and freelancers can utilize release.io for efficient docum
 
 ***By employing release.io, users can ensure seamless release documentation, fostering a more organized and transparent development process.***
 
-# release.io Documentation
+# Documentation
 
 ## Installation Instructions
 
