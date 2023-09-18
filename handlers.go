@@ -450,7 +450,7 @@ func updateRelease(c *gin.Context) {
 	}
 
 	// check for illegal params
-	if newName != c.PostForm("versionName") || newName != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") {
+	if newName != c.PostForm("versionName") || newCode != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal values provided!")
 		return
 	}
