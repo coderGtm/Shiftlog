@@ -424,7 +424,63 @@ func deleteRelease(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusUnauthorized, "Delete Request Unauthorized!")
 }
-func updateRelease(c *gin.Context) {}
+func updateRelease(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get sanatized parameters
+	// get input id
+	releaseId := htmlStripper.Sanitize(c.PostForm("releaseId"))
+	newName := htmlStripper.Sanitize(c.PostForm("versionName"))
+	newCode := htmlStripper.Sanitize(c.PostForm("versionCode"))
+	newHidden := htmlStripper.Sanitize(c.PostForm("hidden"))
+
+	// check for empty params
+	if strings.Trim(releaseId, " ") == "" || strings.Trim(newName, " ") == "" || strings.Trim(newHidden, " ") == "" || strings.Trim(newCode, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check for illegal params
+	if newName != c.PostForm("versionName") || newName != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal values provided!")
+		return
+	}
+	var hidden int
+	switch newHidden {
+	case "true":
+		hidden = 1
+	case "false":
+		hidden = 0
+	default:
+		c.IndentedJSON(http.StatusBadRequest, "Hiddden parameter must have a 'true' or 'false' value")
+	}
+
+	intReleaseId, err := strconv.Atoi(releaseId)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "Release Id must be an Integer.")
+		return
+	}
+	intVersionCode, err := strconv.Atoi(newCode)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "Version Code must be an Integer.")
+		return
+	}
+	if isReleaseOfUser(intReleaseId, int(userId)) {
+		updateReleaseById(intReleaseId, newName, intVersionCode, hidden)
+		c.IndentedJSON(http.StatusOK, "Release Details updated successfully!")
+		return
+	}
+	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized update!")
+}
 
 // Release
 func getReleaseNotes(c *gin.Context) {

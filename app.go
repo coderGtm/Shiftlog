@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"strconv"
 	"time"
 )
 
@@ -102,4 +103,13 @@ func isReleaseAlreadyPresent(appId int, versionCode int) bool {
 		return false
 	}
 	return true
+}
+
+func updateReleaseById(id int, name string, code int, hidden int) {
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	stmnt, err := db.Prepare("UPDATE release SET versionName = ?, versionCode = ?, hidden = ?, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	defer stmnt.Close()
+	_, err = stmnt.Exec(name, code, hidden, currentTimeStamp, id)
+	checkErr(err)
 }
