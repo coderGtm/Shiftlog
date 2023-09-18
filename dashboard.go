@@ -1,27 +1,28 @@
 package main
 
 import (
+	"strconv"
 	"time"
 )
 
 type userApp struct {
-	Id     int    `json:"id"`
-	Name   string `json:"name"`
-	Hidden bool `json:"hidden"`
-	CreatedAt int64 `json:"createdAt"`
-	UpdatedAt int64 `json:"updatedAt"`
+	Id        int    `json:"id"`
+	Name      string `json:"name"`
+	Hidden    bool   `json:"hidden"`
+	CreatedAt int64  `json:"createdAt"`
+	UpdatedAt int64  `json:"updatedAt"`
 }
 type appRelease struct {
-	Id     int    `json:"id"`
-	AppId  int    `json:"appId"`
-	VersionCode  int    `json:"versionCode"`
-	VersionName  string `json:"versionName"`
-	NotesTxt  string `json:"notesTxt"`
-	NotesMd  string `json:"notesMd"`
-	NotesHtml  string `json:"notesHtml"`
-	Hidden bool `json:"hidden"`
-	CreatedAt int64 `json:"createdAt"`
-	UpdatedAt int64 `json:"updatedAt"`
+	Id          int    `json:"id"`
+	AppId       int    `json:"appId"`
+	VersionCode int    `json:"versionCode"`
+	VersionName string `json:"versionName"`
+	NotesTxt    string `json:"notesTxt"`
+	NotesMd     string `json:"notesMd"`
+	NotesHtml   string `json:"notesHtml"`
+	Hidden      bool   `json:"hidden"`
+	CreatedAt   int64  `json:"createdAt"`
+	UpdatedAt   int64  `json:"updatedAt"`
 }
 
 func getAppsOfUser(userId uint) []*userApp {
@@ -57,9 +58,11 @@ func createAppForUser(userId int, appName string) userApp {
 	}
 }
 
-
-
-
-
-
-
+func updateAppById(appId int, newName string, hidden int) {
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	stmnt, err := db.Prepare("UPDATE app SET name = ?, hidden = ?, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	defer stmnt.Close()
+	_, err = stmnt.Exec(newName, hidden, currentTimeStamp, appId)
+	checkErr(err)
+}

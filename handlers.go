@@ -126,7 +126,7 @@ func updatePassword(c *gin.Context) {
 	}
 
 	authToken = updatePasswordById(int(userId), newPassword)
-	data := passwordUpdateSuccessResponse {
+	data := passwordUpdateSuccessResponse{
 		AuthToken: authToken,
 	}
 	c.IndentedJSON(http.StatusOK, data)
@@ -254,13 +254,63 @@ func deleteApp(c *gin.Context) {
 		return
 	}
 	if isAppOfUser(intAppId, int(userId)) {
-		deleteUserApp(userId, uint(intAppId))
+		deleteAppById(intAppId)
 		c.IndentedJSON(http.StatusOK, "App deleted successfully!")
 		return
 	}
 	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized deletion!")
 }
-func updateApp(c *gin.Context) {}
+func updateApp(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get sanatized parameters
+	// get input id
+	appId := htmlStripper.Sanitize(c.PostForm("appId"))
+	newName := htmlStripper.Sanitize(c.PostForm("name"))
+	newHidden := htmlStripper.Sanitize(c.PostForm("hidden"))
+
+	// check for empty params
+	if strings.Trim(appId, " ") == "" || strings.Trim(newName, " ") == "" || strings.Trim(newHidden, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check for illegal params
+	if newName != c.PostForm("name") || newHidden != c.PostForm("hidden") || appId != c.PostForm("appId") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal values provided!")
+		return
+	}
+	var hidden int
+	switch newHidden {
+	case "true":
+		hidden = 1
+	case "false":
+		hidden = 0
+	default:
+		c.IndentedJSON(http.StatusBadRequest, "Hiddden parameter must have a 'true' or 'false' value")
+	}
+
+	intAppId, err := strconv.Atoi(appId)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "appId must be an Integer.")
+		return
+	}
+	if isAppOfUser(intAppId, int(userId)) {
+		updateAppById(intAppId, newName, hidden)
+		c.IndentedJSON(http.StatusOK, "App updated successfully!")
+		return
+	}
+	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized update!")
+}
 
 // App
 func getReleases(c *gin.Context) {
