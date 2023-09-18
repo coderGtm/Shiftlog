@@ -1,6 +1,10 @@
 package main
 
-import "database/sql"
+import (
+	"database/sql"
+	"strconv"
+	"time"
+)
 
 type releaseNotes struct {
 	VersionCode int    `json:"versionCode"`
@@ -76,4 +80,13 @@ func getMaxVersionCodeOfApp(appId int) int {
 	}
 	// record exists
 	return versionCode
+}
+
+func updateReleaseNotesById(id int, notesTxt string, notesMd string, notesHtml string) {
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	stmnt, err := db.Prepare("UPDATE release SET notesTxt = ?, notesMd = ?, notesHtml = ?, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	defer stmnt.Close()
+	_, err = stmnt.Exec(notesTxt, notesMd, notesHtml, currentTimeStamp, id)
+	checkErr(err)
 }

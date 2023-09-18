@@ -561,7 +561,7 @@ func updateReleaseNotes(c *gin.Context) {
 	releaseId := htmlStripper.Sanitize(c.PostForm("releaseId"))
 	notesTxt := htmlStripper.Sanitize(c.PostForm("notesTxt"))
 	notesMd := notesSanitizer.Sanitize(c.PostForm("notesMd"))
-	notesHtml := notesSanitizer.Sanitize(c.PostForm("hidden"))
+	notesHtml := notesSanitizer.Sanitize(c.PostForm("notesHtml"))
 
 	// check for empty params
 	if strings.Trim(releaseId, " ") == "" {
