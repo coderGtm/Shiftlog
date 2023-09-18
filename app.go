@@ -15,20 +15,20 @@ func deleteAppRelease(releaseId int) {
 
 func isReleaseOfUser(releaseId int, userId int) bool {
 	var dbAppId int
-		err := db.QueryRow("SELECT appId from release WHERE id = ?;", releaseId).Scan(&dbAppId)
-		if err != nil {
-			if err != sql.ErrNoRows {
-				// a real error happened!
-				checkErr(err)
-			}
-			// record does not exist
-			return false
+	err := db.QueryRow("SELECT appId from release WHERE id = ?;", releaseId).Scan(&dbAppId)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened!
+			checkErr(err)
 		}
-		// record exists
-		if isAppOfUser(dbAppId, userId) {
-			return true
-		}
+		// record does not exist
 		return false
+	}
+	// record exists
+	if isAppOfUser(dbAppId, userId) {
+		return true
+	}
+	return false
 }
 
 func createReleaseForApp(userId int, appId int, versionCode int, versionName string) appRelease {
@@ -66,27 +66,27 @@ func getReleasesOfApp(appId int) []*appRelease {
 
 func isAppOfUser(appId int, userId int) bool {
 	var dbUserId int
-		err := db.QueryRow("SELECT userId from APP WHERE id = ?;", appId).Scan(&dbUserId)
-		if err != nil {
-			if err != sql.ErrNoRows {
-				// a real error happened!
-				checkErr(err)
-			}
-			// record does not exist
-			return false
+	err := db.QueryRow("SELECT userId from APP WHERE id = ?;", appId).Scan(&dbUserId)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened!
+			checkErr(err)
 		}
-		// record exists
-		if userId == dbUserId {
-			return true
-		}
+		// record does not exist
 		return false
+	}
+	// record exists
+	if userId == dbUserId {
+		return true
+	}
+	return false
 }
 
-func deleteUserApp(userId uint, appId uint) {
-	stmnt, err := db.Prepare("DELETE FROM user WHERE id = ?")
+func deleteAppById(appId int) {
+	stmnt, err := db.Prepare("DELETE FROM app WHERE id = ?")
 	checkErr(err)
 	defer stmnt.Close()
-	_, err = stmnt.Exec(userId)
+	_, err = stmnt.Exec(appId)
 	checkErr(err)
 }
 
