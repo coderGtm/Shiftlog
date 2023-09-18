@@ -15,7 +15,7 @@ func setUpRoutes(router *gin.Engine) {
 	router.GET("getApps", getApps)
 	router.POST("createApp", createApp)
 	router.DELETE("deleteApp", deleteApp)
-	router.POST("updateApp", updateApp)
+	router.PUT("updateApp", updateApp)
 
 	// App
 	router.GET("getReleases", getReleases)
