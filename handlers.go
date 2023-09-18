@@ -89,6 +89,7 @@ func updateUsername(c *gin.Context) {
 	}
 
 	updateUsernameById(int(userId), newUsername)
+	c.IndentedJSON(http.StatusOK, "Username updated successfully!")
 }
 
 func updatePassword(c *gin.Context) {}
