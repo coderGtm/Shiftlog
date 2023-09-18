@@ -21,6 +21,7 @@ Each application can have multiple releases, allowing for meticulous version tra
 
 release.io supports release notes in three formats: **plain text (txt), Markdown (md), and HTML (html)**. This versatile feature accommodates various documentation preferences.
 
+![flowchart](https://github.com/coderGtm/release.io/assets/66418526/827e98d1-be10-4fdb-bff6-00b8283148bb)
 
 
 ## How It Works:
