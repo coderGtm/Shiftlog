@@ -46,6 +46,7 @@ func createAppForUser(userId int, appName string) userApp {
 	currentTimeStamp := time.Now().Unix()
 	stmnt, err := db.Prepare("INSERT INTO APP(userId, name, hidden, createdAt, updatedAt) VALUES(?,?,?,?,?);")
 	checkErr(err)
+	defer stmnt.Close()
 	res, err := stmnt.Exec(userId, appName, 0, currentTimeStamp, currentTimeStamp)
 	checkErr(err)
 	appId, err := res.LastInsertId()

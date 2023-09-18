@@ -41,6 +41,7 @@ func registerNewUser(uname string, pswd string) string {
 	hashedPasswordString := hashPasswordString(pswd)
 	stmnt, err := db.Prepare("INSERT INTO USER(username, password, createdAt, updatedAt) values(?,?,?,?);")
 	checkErr(err)
+	defer stmnt.Close()
 	res, err := stmnt.Exec(uname, hashedPasswordString, currentTimeStamp, currentTimeStamp)
 	checkErr(err)
 	id, err := res.LastInsertId()
@@ -48,6 +49,7 @@ func registerNewUser(uname string, pswd string) string {
 	authToken := createJWT(id)
 	stmnt, err = db.Prepare("UPDATE USER SET authToken = ? WHERE id = ?;")
 	checkErr(err)
+	defer stmnt.Close()
 	_, err = stmnt.Exec(authToken, id)
 	checkErr(err)
 	return authToken
@@ -94,9 +96,9 @@ func verifyAndLogin(uname string, pswd string) (bool, string) {
 		authToken := createJWT(userId)
 		stmnt, err := db.Prepare("UPDATE USER SET authToken = ?, updatedAt = ? WHERE id = ?;")
 		checkErr(err)
+		defer stmnt.Close()
 		_, err = stmnt.Exec(authToken, currentTimeStamp, userId)
 		checkErr(err)
-		stmnt.Close()
 		return true, authToken
 	}
 	return false, ""
@@ -159,6 +161,7 @@ func logoutUser(userId uint) {
 	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
 	stmnt, err := db.Prepare("UPDATE USER SET authToken = NULL, updatedAt = ? WHERE id = ?")
 	checkErr(err)
+	defer stmnt.Close()
 	_, err = stmnt.Exec(currentTimeStamp, userId)
 	checkErr(err)
 }
@@ -166,6 +169,7 @@ func logoutUser(userId uint) {
 func deleteUserAccount(userId uint) {
 	stmnt, err := db.Prepare("DELETE FROM user WHERE id = ?")
 	checkErr(err)
+	defer stmnt.Close()
 	_, err = stmnt.Exec(userId)
 	checkErr(err)
 }

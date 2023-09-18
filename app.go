@@ -8,6 +8,7 @@ import (
 func deleteAppRelease(releaseId int) {
 	stmnt, err := db.Prepare("DELETE FROM release WHERE id = ?")
 	checkErr(err)
+	defer stmnt.Close()
 	_, err = stmnt.Exec(releaseId)
 	checkErr(err)
 }
@@ -34,6 +35,7 @@ func createReleaseForApp(userId int, appId int, versionCode int, versionName str
 	currentTimeStamp := time.Now().Unix()
 	stmnt, err := db.Prepare("INSERT INTO RELEASE(appId, versionCode, versionName, hidden, createdAt, updatedAt) VALUES(?,?,?,?,?,?);")
 	checkErr(err)
+	defer stmnt.Close()
 	res, err := stmnt.Exec(appId, versionCode, versionName, 0, currentTimeStamp, currentTimeStamp)
 	checkErr(err)
 	releaseId, err := res.LastInsertId()
@@ -83,6 +85,7 @@ func isAppOfUser(appId int, userId int) bool {
 func deleteUserApp(userId uint, appId uint) {
 	stmnt, err := db.Prepare("DELETE FROM user WHERE id = ?")
 	checkErr(err)
+	defer stmnt.Close()
 	_, err = stmnt.Exec(userId)
 	checkErr(err)
 }
