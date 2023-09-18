@@ -26,5 +26,5 @@ func setUpRoutes(router *gin.Engine) {
 
 	// Release
 	api.GET("getReleaseNotes", getReleaseNotes)
-	api.PUT("updateReleaseNotesTxt", updateReleaseNotes)
+	api.PUT("updateReleaseNotes", updateReleaseNotes)
 }
