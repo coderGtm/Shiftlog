@@ -55,7 +55,41 @@ func deleteAccount(c *gin.Context) {
 	deleteUserAccount(userId)
 	c.IndentedJSON(http.StatusOK, "User Account Deleted Successfully!")
 }
-func updateUsername(c *gin.Context) {}
+func updateUsername(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get sanatized parameters
+	newUsername := htmlStripper.Sanitize(c.PostForm("newUsername"))
+
+	// check for empty params
+	if strings.Trim(newUsername, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check for illegal params
+	if newUsername != c.PostForm("newUsername") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal username provided!")
+		return
+	}
+
+	// check is username already used
+	if checkUsernameExists(newUsername) {
+		c.IndentedJSON(http.StatusConflict, "This username is already taken!")
+		return
+	}
+
+	updateUsernameById(int(userId), newUsername)
+}
 
 func updatePassword(c *gin.Context) {}
 

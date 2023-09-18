@@ -169,3 +169,12 @@ func deleteUserAccount(userId uint) {
 	_, err = stmnt.Exec(userId)
 	checkErr(err)
 }
+
+func updateUsernameById(userId int, newUsername string) {
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	stmnt, err := db.Prepare("UPDATE USER SET username = ?, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	defer stmnt.Close()
+	_, err = stmnt.Exec(newUsername, currentTimeStamp, userId)
+	checkErr(err)
+}
