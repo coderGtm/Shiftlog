@@ -55,7 +55,9 @@ func deleteAccount(c *gin.Context) {
 	deleteUserAccount(userId)
 	c.IndentedJSON(http.StatusOK, "User Account Deleted Successfully!")
 }
-func updateAccount(c *gin.Context) {}
+func updateUsername(c *gin.Context) {}
+
+func updatePassword(c *gin.Context) {}
 
 func login(c *gin.Context) {
 	// get sanatized parameters
@@ -328,7 +330,7 @@ func getReleaseNotes(c *gin.Context) {
 			c.IndentedJSON(http.StatusNotFound, "Release Notes not found!")
 			return
 		}
-		fmt.Print("rel:",releaseNotes)
+		fmt.Print("rel:", releaseNotes)
 		c.IndentedJSON(http.StatusOK, releaseNotes)
 		return
 	} else if appId != "" && versionCode != "" {
