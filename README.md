@@ -1,6 +1,6 @@
 # release.io
 
-A highly performant and efficient system to create, manage and publish release notes in various formats for your products.
+A highly performant and efficient system to create, manage and publish release notes in various formats for your products. **Can easily run as a microservice on your existing server or a standalone app on a completely different system if you prefer so, no fuss invloved!!**
 
 ## Overview
 release.io is a robust release note management system designed to streamline the process of creating and managing release notes for applications and products. Accessible only through user accounts, this system empowers users to efficiently handle their release documentation.
@@ -91,7 +91,7 @@ Replace `your-username` with your GitHub username.
 ### Set Environment Variables
 
 1. Locate the `demo.env` file in the project directory.
-2. Open `demo.env` and fill in the required environment variables, including database connection details and settings.
+2. Open `demo.env` and fill in the required environment variables, and rename it to `.env`. This step also now protects the file via `.gitignore`.
 
 ### Download Go Modules
 
@@ -139,4 +139,4 @@ release.io offers a user-friendly interface for managing release notes. Here's a
 
 - An empty database file named `sqlite3.db` with all necessary tables is provided, eliminating manual database setup.
 
-- Configure environment variables in `demo.env` to match your specific requirements, including database connection settings.
+- Configure environment variables in `demo.env` to match your specific requirements, and then rename it to just `.env`.
