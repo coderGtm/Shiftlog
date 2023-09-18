@@ -92,7 +92,45 @@ func updateUsername(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, "Username updated successfully!")
 }
 
-func updatePassword(c *gin.Context) {}
+func updatePassword(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get sanatized parameters
+	newPassword := htmlStripper.Sanitize(c.PostForm("newPassword"))
+
+	// check for empty params
+	if strings.Trim(newPassword, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Empty parameters in Request Body")
+		return
+	}
+
+	// check for illegal params
+	if newPassword != c.PostForm("newPassword") {
+		c.IndentedJSON(http.StatusBadRequest, "Password contain illegal charachters!")
+		return
+	}
+
+	// check if same password
+	if checkIfSamePassword(int(userId), newPassword) {
+		c.IndentedJSON(http.StatusConflict, "New Password cannot ba same as old Password!")
+		return
+	}
+
+	authToken = updatePasswordById(int(userId), newPassword)
+	data := passwordUpdateSuccessResponse {
+		AuthToken: authToken,
+	}
+	c.IndentedJSON(http.StatusOK, data)
+}
 
 func login(c *gin.Context) {
 	// get sanatized parameters

@@ -20,6 +20,9 @@ type createAccountSuccessResponse struct {
 type loginSuccessResponse struct {
 	AuthToken string `json:"authToken"`
 }
+type passwordUpdateSuccessResponse struct {
+	AuthToken string `json:"authToken"`
+}
 
 func checkUsernameExists(uname string) bool {
 	sqlStmt := `SELECT username FROM USER WHERE username = ?`
@@ -181,4 +184,35 @@ func updateUsernameById(userId int, newUsername string) {
 	defer stmnt.Close()
 	_, err = stmnt.Exec(newUsername, currentTimeStamp, userId)
 	checkErr(err)
+}
+
+func checkIfSamePassword(userId int, newPass string) bool {
+	var hashedPassword string
+	err := db.QueryRow("SELECT password from USER WHERE id = ?;", userId).Scan(&hashedPassword)
+	if err != nil {
+		if err != sql.ErrNoRows {
+			// a real error happened!
+			checkErr(err)
+		}
+		// record does not exist
+		panic("User does not exist!")
+	}
+	// record exists
+	if bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(newPass)) == nil {
+		// password matched
+		return true
+	}
+	return false
+}
+
+func updatePasswordById(userId int, newPass string) string {
+	hashedPasswordString := hashPasswordString(newPass)
+	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
+	authToken := createJWT(int64(userId))
+	stmnt, err := db.Prepare("UPDATE USER SET password = ?, authToken = ?, updatedAt = ? WHERE id = ?")
+	checkErr(err)
+	defer stmnt.Close()
+	_, err = stmnt.Exec(hashedPasswordString, authToken, currentTimeStamp, userId)
+	checkErr(err)
+	return authToken
 }

@@ -7,6 +7,7 @@ func setUpRoutes(router *gin.Engine) {
 	router.POST("createAccount", createAccount)
 	router.DELETE("deleteAccount", deleteAccount)
 	router.PUT("updateUsername", updateUsername)
+	router.PUT("updatePassword", updatePassword)
 	router.POST("login", login)
 	router.GET("logout", logout)
 
