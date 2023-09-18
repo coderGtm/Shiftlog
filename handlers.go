@@ -544,4 +544,47 @@ func getReleaseNotes(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusBadRequest, "Missing Parameters!")
 }
-func updateReleaseNotes(c *gin.Context) {}
+func updateReleaseNotes(c *gin.Context) {
+	authToken := extractAuthToken(c)
+	if authToken == "" {
+		c.IndentedJSON(http.StatusUnauthorized, "Auth token missing!")
+		return
+	}
+	userId, validToken := isTokenValid(authToken)
+	if !validToken {
+		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
+		return
+	}
+
+	// get sanatized parameters
+	// get input id
+	releaseId := htmlStripper.Sanitize(c.PostForm("releaseId"))
+	notesTxt := htmlStripper.Sanitize(c.PostForm("notesTxt"))
+	notesMd := notesSanitizer.Sanitize(c.PostForm("notesMd"))
+	notesHtml := notesSanitizer.Sanitize(c.PostForm("hidden"))
+
+	// check for empty params
+	if strings.Trim(releaseId, " ") == "" {
+		c.IndentedJSON(http.StatusBadRequest, "Missing Release ID")
+		return
+	}
+
+	// check for illegal params
+	if releaseId != c.PostForm("releaseId") {
+		c.IndentedJSON(http.StatusBadRequest, "Illegal values for Release ID provided!")
+		return
+	}
+
+	intReleaseId, err := strconv.Atoi(releaseId)
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, "Release Id must be an Integer.")
+		return
+	}
+
+	if isReleaseOfUser(intReleaseId, int(userId)) {
+		updateReleaseNotesById(intReleaseId, notesTxt, notesMd, notesHtml)
+		c.IndentedJSON(http.StatusOK, "Release Notes updated successfully!")
+		return
+	}
+	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized update!")
+}

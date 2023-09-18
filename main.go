@@ -11,6 +11,7 @@ import (
 var db *sql.DB
 var dbErr error
 var htmlStripper *bluemonday.Policy
+var notesSanitizer *bluemonday.Policy
 
 func main() {
 	db, dbErr = sql.Open("sqlite3", "development.db")
@@ -20,6 +21,7 @@ func main() {
 	checkErr(dbErr)
 
 	htmlStripper = bluemonday.StrictPolicy()
+	notesSanitizer = bluemonday.UGCPolicy()
 	err := godotenv.Load(".env")
 	checkErr(err)
 
