@@ -63,3 +63,76 @@ Product managers can leverage the platform to keep stakeholders informed about r
 Individual developers and freelancers can utilize release.io for efficient documentation of their projects.
 
 ***By employing release.io, users can ensure seamless release documentation, fostering a more organized and transparent development process.***
+
+# release.io Documentation
+
+## Installation Instructions
+
+### Prerequisites
+
+- **Go (Golang):** Ensure you have Go installed on your system. You can download it from [https://golang.org/dl/](https://golang.org/dl/).
+
+- **SQLite3:** release.io requires SQLite3. If not already installed, download it from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html) and follow the installation instructions for your platform.
+
+### Clone the Repository
+
+Open your terminal or command prompt and navigate to your desired installation directory. Clone the repository:
+
+```shell
+git clone https://github.com/your-username/release.io.git
+```
+
+Replace `your-username` with your GitHub username.
+
+### Set Environment Variables
+
+1. Locate the `demo.env` file in the project directory.
+2. Open `demo.env` and fill in the required environment variables, including database connection details and settings.
+
+### Download Go Modules
+
+Navigate to the project's root directory in your terminal and run:
+
+```shell
+go mod tidy
+```
+
+### Run the Application
+
+Start the application with the following command:
+
+```shell
+go run .
+```
+
+### Access the Application
+
+By default, the application runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
+
+## Usage Guide
+
+release.io offers a user-friendly interface for managing release notes. Here's a brief guide:
+
+1. **User Registration and Login:**
+   - Register for an account or log in if you already have one. User management ensures secure access.
+
+2. **Creating Applications:**
+   - After logging in, create new applications by providing details like name and description.
+
+3. **Managing Releases:**
+   - Within each application, create and manage multiple releases, organized by version numbers.
+
+4. **Adding Release Notes:**
+   - For each release, add release notes in plain text (txt), Markdown (md), or HTML (html) format.
+
+5. **Browsing and Exporting Release Notes:**
+   - Easily browse and view release notes associated with your applications.
+   - Export release notes in your chosen format for documentation.
+
+## Configuration
+
+- Customize the application's configuration in the `main.go` file. You can change the listening port if needed.
+
+- An empty database file named `sqlite3.db` with all necessary tables is provided, eliminating manual database setup.
+
+- Configure environment variables in `demo.env` to match your specific requirements, including database connection settings.
