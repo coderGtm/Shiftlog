@@ -4,7 +4,6 @@ import "github.com/gin-gonic/gin"
 
 func setUpRoutes(router *gin.Engine) {
 	api := router.Group("api")
-	api := router.Group("api")
 	// Auth
 	api.POST("createAccount", createAccount)
 	api.DELETE("deleteAccount", deleteAccount)
