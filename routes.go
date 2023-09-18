@@ -3,27 +3,28 @@ package main
 import "github.com/gin-gonic/gin"
 
 func setUpRoutes(router *gin.Engine) {
+	api := router.Group("api")
 	// Auth
-	router.POST("createAccount", createAccount)
-	router.DELETE("deleteAccount", deleteAccount)
-	router.PUT("updateUsername", updateUsername)
-	router.PUT("updatePassword", updatePassword)
-	router.POST("login", login)
-	router.GET("logout", logout)
+	api.POST("createAccount", createAccount)
+	api.DELETE("deleteAccount", deleteAccount)
+	api.PUT("updateUsername", updateUsername)
+	api.PUT("updatePassword", updatePassword)
+	api.POST("login", login)
+	api.GET("logout", logout)
 
 	// Dashboard
-	router.GET("getApps", getApps)
-	router.POST("createApp", createApp)
-	router.DELETE("deleteApp", deleteApp)
-	router.PUT("updateApp", updateApp)
+	api.GET("getApps", getApps)
+	api.POST("createApp", createApp)
+	api.DELETE("deleteApp", deleteApp)
+	api.PUT("updateApp", updateApp)
 
 	// App
-	router.GET("getReleases", getReleases)
-	router.POST("createRelease", createRelease)
-	router.DELETE("deleteRelease", deleteRelease)
-	router.POST("updateRelease", updateRelease)
+	api.GET("getReleases", getReleases)
+	api.POST("createRelease", createRelease)
+	api.DELETE("deleteRelease", deleteRelease)
+	api.PUT("updateRelease", updateRelease)
 
 	// Release
-	router.GET("getReleaseNotes", getReleaseNotes)
-	router.POST("updateReleaseNotesTxt", updateReleaseNotes)
+	api.GET("getReleaseNotes", getReleaseNotes)
+	api.PUT("updateReleaseNotesTxt", updateReleaseNotes)
 }
