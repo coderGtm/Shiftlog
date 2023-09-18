@@ -121,7 +121,7 @@ func updatePassword(c *gin.Context) {
 
 	// check if same password
 	if checkIfSamePassword(int(userId), newPassword) {
-		c.IndentedJSON(http.StatusConflict, "New Password cannot ba same as old Password!")
+		c.IndentedJSON(http.StatusConflict, "New Password cannot be same as old Password!")
 		return
 	}
 
