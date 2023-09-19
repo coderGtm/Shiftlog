@@ -83,10 +83,8 @@ Individual developers and freelancers can utilize release.io for efficient docum
 Open your terminal or command prompt and navigate to your desired installation directory. Clone the repository:
 
 ```shell
-git clone https://github.com/your-username/release.io.git
+git clone https://github.com/coderGtm/release.io.git
 ```
-
-Replace `your-username` with your GitHub username.
 
 ### Set Environment Variables
 
