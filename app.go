@@ -6,6 +6,20 @@ import (
 	"time"
 )
 
+type appRelease struct {
+	Id          int    `json:"id"`
+	AppId       int    `json:"appId"`
+	VersionCode int    `json:"versionCode"`
+	VersionName string `json:"versionName"`
+	NotesTxt    string `json:"notesTxt"`
+	NotesMd     string `json:"notesMd"`
+	NotesHtml   string `json:"notesHtml"`
+	Data		string `json:"data"`
+	Hidden      bool   `json:"hidden"`
+	CreatedAt   int64  `json:"createdAt"`
+	UpdatedAt   int64  `json:"updatedAt"`
+}
+
 func deleteAppRelease(releaseId int) {
 	stmnt, err := db.Prepare("DELETE FROM release WHERE id = ?")
 	checkErr(err)
@@ -43,19 +57,19 @@ func createReleaseForApp(userId int, appId int, versionCode int, versionName str
 	checkErr(err)
 
 	return appRelease{
-		int(releaseId), appId, versionCode, versionName, "", "", "", false, currentTimeStamp, currentTimeStamp,
+		int(releaseId), appId, versionCode, versionName, "", "", "", "", false, currentTimeStamp, currentTimeStamp,
 	}
 }
 
 func getReleasesOfApp(appId int) []*appRelease {
 	releases := make([]*appRelease, 0)
-	rows, err := db.Query("SELECT id, versionCode, versionName, hidden, createdAt, updatedAt from release WHERE appId = ?", appId)
+	rows, err := db.Query("SELECT id, versionCode, versionName, data, hidden, createdAt, updatedAt from release WHERE appId = ?", appId)
 	checkErr(err)
 	defer rows.Close()
 
 	for rows.Next() {
 		release := new(appRelease)
-		err := rows.Scan(&release.Id, &release.VersionCode, &release.VersionName, &release.Hidden, &release.CreatedAt, &release.UpdatedAt)
+		err := rows.Scan(&release.Id, &release.VersionCode, &release.VersionName, &release.Data, &release.Hidden, &release.CreatedAt, &release.UpdatedAt)
 		checkErr(err)
 		releases = append(releases, release)
 	}
@@ -105,11 +119,11 @@ func isReleaseAlreadyPresent(appId int, versionCode int) bool {
 	return true
 }
 
-func updateReleaseById(id int, name string, code int, hidden int) {
+func updateReleaseById(id int, name string, code int, data string, hidden int) {
 	currentTimeStamp := strconv.FormatInt(time.Now().Unix(), 10)
-	stmnt, err := db.Prepare("UPDATE release SET versionName = ?, versionCode = ?, hidden = ?, updatedAt = ? WHERE id = ?")
+	stmnt, err := db.Prepare("UPDATE release SET versionName = ?, versionCode = ?, data = ?, hidden = ?, updatedAt = ? WHERE id = ?")
 	checkErr(err)
 	defer stmnt.Close()
-	_, err = stmnt.Exec(name, code, hidden, currentTimeStamp, id)
+	_, err = stmnt.Exec(name, code, data, hidden, currentTimeStamp, id)
 	checkErr(err)
 }

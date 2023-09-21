@@ -442,6 +442,7 @@ func updateRelease(c *gin.Context) {
 	newName := htmlStripper.Sanitize(c.PostForm("versionName"))
 	newCode := htmlStripper.Sanitize(c.PostForm("versionCode"))
 	newHidden := htmlStripper.Sanitize(c.PostForm("hidden"))
+	data := htmlStripper.Sanitize(c.PostForm("data"))
 
 	// check for empty params
 	if strings.Trim(releaseId, " ") == "" || strings.Trim(newName, " ") == "" || strings.Trim(newHidden, " ") == "" || strings.Trim(newCode, " ") == "" {
@@ -450,7 +451,7 @@ func updateRelease(c *gin.Context) {
 	}
 
 	// check for illegal params
-	if newName != c.PostForm("versionName") || newCode != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") {
+	if newName != c.PostForm("versionName") || newCode != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") || data != c.PostForm("data") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal values provided!")
 		return
 	}
@@ -475,7 +476,7 @@ func updateRelease(c *gin.Context) {
 		return
 	}
 	if isReleaseOfUser(intReleaseId, int(userId)) {
-		updateReleaseById(intReleaseId, newName, intVersionCode, hidden)
+		updateReleaseById(intReleaseId, newName, intVersionCode, data, hidden)
 		c.IndentedJSON(http.StatusOK, "Release Details updated successfully!")
 		return
 	}

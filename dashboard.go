@@ -12,18 +12,6 @@ type userApp struct {
 	CreatedAt int64  `json:"createdAt"`
 	UpdatedAt int64  `json:"updatedAt"`
 }
-type appRelease struct {
-	Id          int    `json:"id"`
-	AppId       int    `json:"appId"`
-	VersionCode int    `json:"versionCode"`
-	VersionName string `json:"versionName"`
-	NotesTxt    string `json:"notesTxt"`
-	NotesMd     string `json:"notesMd"`
-	NotesHtml   string `json:"notesHtml"`
-	Hidden      bool   `json:"hidden"`
-	CreatedAt   int64  `json:"createdAt"`
-	UpdatedAt   int64  `json:"updatedAt"`
-}
 
 func getAppsOfUser(userId uint) []*userApp {
 	apps := make([]*userApp, 0)
