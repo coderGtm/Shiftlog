@@ -49,9 +49,9 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
     **Response:**
 
-    - ****Unauthorized (401):**** _Auth token missing!_
+    - **Unauthorized (401):** _Auth token missing!_
 
-    - ****Unauthorized (401):**** _Invalid Auth Token_
+    - **Unauthorized (401):** _Invalid Auth Token_
 
     - **OK (200):** _User Account Deleted Successfully!_
 
@@ -73,9 +73,9 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
     **Response:**
 
-    - ****Unauthorized (401):**** _Auth token missing!_
+    - **Unauthorized (401):** _Auth token missing!_
 
-    - ****Unauthorized (401):**** _Invalid Auth Token_
+    - **Unauthorized (401):** _Invalid Auth Token_
 
     - **BadRequest (400):** _Empty parameters in Request Body_
 
@@ -103,9 +103,9 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
     **Response:**
 
-    - ****Unauthorized (401):**** _Auth token missing!_
+    - **Unauthorized (401):** _Auth token missing!_
 
-    - ****Unauthorized (401):**** _Invalid Auth Token_
+    - **Unauthorized (401):** _Invalid Auth Token_
 
     - **BadRequest (400):** _Empty parameters in Request Body_
 
@@ -163,14 +163,233 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
     **Response:**
 
-    - ****Unauthorized (401):**** _Auth token missing!_
+    - **Unauthorized (401):** _Auth token missing!_
 
-    - ****Unauthorized (401):**** _Invalid Auth Token_
+    - **Unauthorized (401):** _Invalid Auth Token_
 
     - **OK (200):** _Logged out!_
 
-    
+
 
 ## 2. Dashboard
+
+
+
+* ### `/api/getApps`
+
+    #### Used to get list of all apps of a user.
+
+    **TYPE:** GET
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    _NONE_
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **OK (200):** _`[{id:<id>, name: <name>, hidden: [true/false], createdAt: <timestamp>, updatedAt: <timestamp>}, ...]`_
+
+
+
+* ### `/api/createApp`
+
+    #### Used to get list of all apps of a user.
+
+    **TYPE:** POST
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `appName: string`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Empty app Name is not allowed._
+
+    - **BadRequest (400):** _Illegal app Name_
+
+    - **OK (200):** _`{id:<id>, name: <name>, hidden: [true/false], createdAt: <timestamp>, updatedAt: <timestamp>}`_
+
+
+
+* ### `/api/deleteApp`
+
+    #### Used to delete an app of a user.
+
+    **TYPE:** DELETE
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `appId: int`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _appId must be an Integer._
+
+    - **BadRequest (400):** _Illegal app Id_
+
+    - **Unauthorized (401):** _Unauthorized deletion!_
+
+    - **OK (200):** _`App deleted successfully!`_
+
+
+
+* ### `/api/updateApp`
+
+    #### Used to delete an app of a user.
+
+    **TYPE:** PUT
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `appId: int`
+    - `name: string`
+    - `hidden: int`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Empty parameters in Request Body_
+
+    - **BadRequest (400):** _Illegal values provided!_
+
+    - **BadRequest (400):** _Hiddden parameter must have a 'true' or 'false' value_
+
+    - **BadRequest (400):** _appId must be an Integer._
+
+    - **Unauthorized (401):** _Unauthorized update!_
+
+    - **OK (200):** _`App updated successfully!`_
+
+
+
 ## 3. App
+
+
+
+* ### `/api/getRelease`
+
+    #### Used to get Releases of an App.
+
+    **TYPE:** GET
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `appId: int`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Illegal app Id_
+
+    - **BadRequest (400):** _App ID must be an Integer._
+
+    - **Unauthorized (401):** _Unauthorized access!_
+
+    - **OK (200):** _`[{id:<id>, appId: <appId>, versionCode: <code>, versionName: <name>, notesTxt: <txt>, notesMd: <md>, notesHtml: <html>, data: <stringData>, hidden: [true/false], createdAt: <timestamp>, updatedAt: <timestamp>}, ...]`_
+
+
+
+* ### `/api/createReleases`
+
+    #### Used to create a new Release of an App.
+
+    **TYPE:** POST
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `appId: int`
+    - `versionName: string`
+    - `versionCode: int`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Illegal input parameter values_
+
+    - **BadRequest (400):** _App ID must be an integer_
+
+    - **BadRequest (400):** _Version Code must be an integer_
+
+    - **BadRequest (400):** _Empty Version Name is not allowed._
+
+    - **BadRequest (400):** _This Version Code already exists_
+
+    - **Unauthorized (401):** _Unauthorized Request!_
+
+    - **OK (200):** _`{id:<id>, appId: <appId>, versionCode: <code>, versionName: <name>, notesTxt: <txt>, notesMd: <md>, notesHtml: <html>, data: <stringData>, hidden: [true/false], createdAt: <timestamp>, updatedAt: <timestamp>}`_
+
+
+
+* ### `/api/deleteRelease`
+
+    #### Used to delete an existing Release of an App.
+
+    **TYPE:** DELETE
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `releaseId: int`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Illegal Release Id_
+
+    - **BadRequest (400):** _releaseId must be an Integer._
+
+    - **Unauthorized (401):** _Delete Request Unauthorized!_
+
+    - **OK (200):** _`Release deleted successfully!`_
 ## 4. Release
