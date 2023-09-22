@@ -64,13 +64,16 @@ You can change the port on which the service runs by modifying the `PORT` value 
 ### 1. User Registration and Authentication:
 
 Users register for an account, providing the necessary authentication credentials.
-Creating and Managing Apps:
+
+### 2. Creating and Managing Apps:
 
 Once logged in, users can create and manage their applications, defining specific attributes and settings.
-### 2. Versioning and Release Notes:
+
+### 3. Versioning and Release Notes:
 
 Within each application, users can create and manage multiple releases. For each release, they can attach release notes in their preferred format (txt, md, html).
-### 3. Browsing and Exporting Release Notes:
+
+### 4. Browsing and Exporting Release Notes:
 
 Users can easily browse and view release notes associated with their applications. Additionally, they have the option to export notes in their chosen format.
 
