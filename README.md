@@ -1,28 +1,62 @@
 # release.io
 
-A highly performant and efficient system to create, manage and publish release notes in various formats for your products. **Can easily run as a microservice on your existing server or a standalone app on a completely different system if you prefer so, no fuss invloved!!**
+A fast, efficient and secure system to create, manage and publish Release Notes for your apps/products.
 
-## Overview
-release.io is a robust release note management system designed to streamline the process of creating and managing release notes for applications and products. Accessible only through user accounts, this system empowers users to efficiently handle their release documentation.
+🚀 Blazingly Fast APIs wriiten in Go
 
-## Key Features
+🔖 Supports Release Notes in multiple formats *(Plain Text, Markdown and HTML)*
 
-### 1. User Management
-
-Access to release.io requires user authentication, ensuring secure and personalized use.
-
-### 2. App Creation
-
-Users have the ability to create individual applications within the system, facilitating organized release note management.
-Release Versioning:
-
-Each application can have multiple releases, allowing for meticulous version tracking and management.
-### 3. Release Note Formats
-
-release.io supports release notes in three formats: **plain text (txt), Markdown (md), and HTML (html)**. This versatile feature accommodates various documentation preferences.
+🔒 Fully Secure Backend with JWT Auth Tokens
 
 ![flowchart](https://github.com/coderGtm/release.io/assets/66418526/827e98d1-be10-4fdb-bff6-00b8283148bb)
 
+## Getting Started
+
+release.io is available as an API system which can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
+
+#### Prerequisites
+
+- **Go (Golang):** Ensure you have Go installed on your system. You can download it from [https://golang.org/dl/](https://golang.org/dl/).
+
+- **SQLite3:** release.io requires SQLite3. If not already installed, download it from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html) and follow the installation instructions for your platform.
+
+#### Clone the Repository
+
+Open your terminal or command prompt and navigate to your desired installation directory. Clone the repository:
+
+```shell
+git clone https://github.com/coderGtm/release.io.git
+```
+
+#### Set Environment Variables
+
+1. Locate the `demo.env` file in the project directory.
+2. Open `demo.env` and fill in the required environment variables.
+3. Rename `demo.env` to `.env`. This step now protects the file via `.gitignore`.
+
+#### Download Go Modules
+
+Navigate to the project's root directory in your terminal and run:
+
+```shell
+go mod tidy
+```
+
+#### Run the Application
+
+Start the application with the following command:
+
+```shell
+go run .
+```
+
+#### Access the Application
+
+By default, the application (api) runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
+
+## Deployment
+
+You can change the port on which the service runs by modifying the `PORT` value in your environment config file (`.env`).
 
 ## How It Works:
 
@@ -38,6 +72,7 @@ Within each application, users can create and manage multiple releases. For each
 ### 3. Browsing and Exporting Release Notes:
 
 Users can easily browse and view release notes associated with their applications. Additionally, they have the option to export notes in their chosen format.
+
 ## Benefits
 
 - ### Efficient Documentation: 
@@ -52,89 +87,18 @@ Users can easily browse and view release notes associated with their application
 - ### Enhanced Collaboration:
     The user management feature ensures that only authorized individuals have access, promoting secure collaboration within teams.
 
-## Target Audience
+## Built With
 
-Developers, product managers, and teams involved in the development and release of applications and products.
-## Use Case Scenarios
+* [Gin](https://github.com/gin-gonic/gin) - Gin is a web framework written in Go. It features a martini-like API with performance that is up to 40 times faster
+* [jwt-go](https://github.com/golang-jwt/jwt/v5) - A go implementation of JSON Web Tokens.
+* [go-sqlite3](https://github.com/mattn/go-sqlite3) - A sqlite3 driver that conforms to the built-in database/sql interface.
+* [bluemonday](https://github.com/microcosm-cc/bluemonday) - bluemonday is a HTML sanitizer implemented in Go. It is fast and highly configurable.
+* [Go Cryptography](https://golang.org/x/crypto) - This repository holds supplementary Go cryptography libraries.
 
-#### 1. Software Development Teams:
-Development teams can use release.io to maintain a clear record of version updates and communicate changes effectively.
+## Contributing
 
-#### 2. Product Managers:
-Product managers can leverage the platform to keep stakeholders informed about releases and new features.
+Contributions are welcome. Please open an issue first and refer to that in your pull request.
 
-#### 3. Freelancers and Independent Developers:
-Individual developers and freelancers can utilize release.io for efficient documentation of their projects.
+## License
 
-***By employing release.io, users can ensure seamless release documentation, fostering a more organized and transparent development process.***
-
-# Documentation
-
-## Installation Instructions
-
-### Prerequisites
-
-- **Go (Golang):** Ensure you have Go installed on your system. You can download it from [https://golang.org/dl/](https://golang.org/dl/).
-
-- **SQLite3:** release.io requires SQLite3. If not already installed, download it from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html) and follow the installation instructions for your platform.
-
-### Clone the Repository
-
-Open your terminal or command prompt and navigate to your desired installation directory. Clone the repository:
-
-```shell
-git clone https://github.com/coderGtm/release.io.git
-```
-
-### Set Environment Variables
-
-1. Locate the `demo.env` file in the project directory.
-2. Open `demo.env` and fill in the required environment variables, and rename it to `.env`. This step also now protects the file via `.gitignore`.
-
-### Download Go Modules
-
-Navigate to the project's root directory in your terminal and run:
-
-```shell
-go mod tidy
-```
-
-### Run the Application
-
-Start the application with the following command:
-
-```shell
-go run .
-```
-
-### Access the Application
-
-By default, the application runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
-
-## Usage Guide
-
-release.io offers a user-friendly interface for managing release notes. Here's a brief guide:
-
-1. **User Registration and Login:**
-   - Register for an account or log in if you already have one. User management ensures secure access.
-
-2. **Creating Applications:**
-   - After logging in, create new applications by providing details like name and description.
-
-3. **Managing Releases:**
-   - Within each application, create and manage multiple releases, organized by version numbers.
-
-4. **Adding Release Notes:**
-   - For each release, add release notes in plain text (txt), Markdown (md), or HTML (html) format.
-
-5. **Browsing and Exporting Release Notes:**
-   - Easily browse and view release notes associated with your applications.
-   - Export release notes in your chosen format for documentation.
-
-## Configuration
-
-- Customize the application's configuration in the `main.go` file. You can change the listening port if needed.
-
-- An empty database file named `sqlite3.db` with all necessary tables is provided, eliminating manual database setup.
-
-- Configure environment variables in `demo.env` to match your specific requirements, and then rename it to just `.env`.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
