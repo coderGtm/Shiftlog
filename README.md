@@ -10,7 +10,7 @@ A fast, efficient and secure system to create, manage and publish Release Notes 
 
 ![flowchart](https://github.com/coderGtm/release.io/assets/66418526/827e98d1-be10-4fdb-bff6-00b8283148bb)
 
-## Getting Started
+## 🛠️ Getting Started
 
 release.io is available as an API system which can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
 
@@ -54,11 +54,11 @@ go run .
 
 By default, the application (api) runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
 
-## Deployment
+## 🚀 Deployment
 
 You can change the port on which the service runs by modifying the `PORT` value in your environment config file (`.env`).
 
-## How It Works:
+## 🚧 How It Works:
 
 ### 1. User Registration and Authentication:
 
@@ -73,7 +73,7 @@ Within each application, users can create and manage multiple releases. For each
 
 Users can easily browse and view release notes associated with their applications. Additionally, they have the option to export notes in their chosen format.
 
-## Benefits
+## ✅ Benefits
 
 - ### Efficient Documentation: 
     release.io streamlines the process of creating, updating, and managing release notes, saving valuable time for developers and product teams.
@@ -87,7 +87,7 @@ Users can easily browse and view release notes associated with their application
 - ### Enhanced Collaboration:
     The user management feature ensures that only authorized individuals have access, promoting secure collaboration within teams.
 
-## Built With
+## 🔍 Built With
 
 * [Gin](https://github.com/gin-gonic/gin) - Gin is a web framework written in Go. It features a martini-like API with performance that is up to 40 times faster
 * [jwt-go](https://github.com/golang-jwt/jwt/v5) - A go implementation of JSON Web Tokens.
@@ -95,10 +95,14 @@ Users can easily browse and view release notes associated with their application
 * [bluemonday](https://github.com/microcosm-cc/bluemonday) - bluemonday is a HTML sanitizer implemented in Go. It is fast and highly configurable.
 * [Go Cryptography](https://golang.org/x/crypto) - This repository holds supplementary Go cryptography libraries.
 
-## Contributing
+## 🌱 Contributing
 
 Contributions are welcome. Please open an issue first and refer to that in your pull request.
 
-## License
+## 🌟 Support
+
+You can show your support by becoming a ***stargazer...*** 
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
