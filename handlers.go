@@ -463,6 +463,7 @@ func updateRelease(c *gin.Context) {
 		hidden = 0
 	default:
 		c.IndentedJSON(http.StatusBadRequest, "Hiddden parameter must have a 'true' or 'false' value")
+		return
 	}
 
 	intReleaseId, err := strconv.Atoi(releaseId)

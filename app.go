@@ -63,7 +63,7 @@ func createReleaseForApp(userId int, appId int, versionCode int, versionName str
 
 func getReleasesOfApp(appId int) []*appRelease {
 	releases := make([]*appRelease, 0)
-	rows, err := db.Query("SELECT id, versionCode, versionName, data, hidden, createdAt, updatedAt from release WHERE appId = ?", appId)
+	rows, err := db.Query("SELECT id, versionCode, versionName, COALESCE(data, ''), hidden, createdAt, updatedAt from release WHERE appId = ?", appId)
 	checkErr(err)
 	defer rows.Close()
 
