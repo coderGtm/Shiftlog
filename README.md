@@ -54,6 +54,7 @@ go run .
 
 By default, the application (api) runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
 
+
 ## 🚀 Deployment
 
 You can change the port on which the service runs by modifying the `PORT` value in your environment config file (`.env`).
@@ -86,6 +87,10 @@ Users can easily browse and view release notes associated with their application
 
 - ### Enhanced Collaboration:
     The user management feature ensures that only authorized individuals have access, promoting secure collaboration within teams.
+
+## 📝 API Documentation
+
+***Please see [documentation.md](documentation.md) for a detailed API Documentation of release.io***
 
 ## 🔍 Built With
 
