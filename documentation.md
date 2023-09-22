@@ -4,6 +4,7 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
 ## 1. Auth
 
+As the name suggests, these endpoints are used for all Authentication related stuff.
 
 * ### `/api/createAccount`
 
@@ -173,7 +174,7 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
 ## 2. Dashboard
 
-
+These endpoints are typically to be consumed by the Dashboard of a frontend, hence they are classified as Dashboard APIs.
 
 * ### `/api/getApps`
 
@@ -295,7 +296,7 @@ release.io features a set of APIs to easily create, manage, and publish Release 
 
 ## 3. App
 
-
+These are App-specific APIs, typically used to present an "App page" by a frontend, hence the classification.
 
 * ### `/api/getRelease`
 
@@ -392,4 +393,127 @@ release.io features a set of APIs to easily create, manage, and publish Release 
     - **Unauthorized (401):** _Delete Request Unauthorized!_
 
     - **OK (200):** _`Release deleted successfully!`_
+
+
+
+* ### `/api/updateRelease`
+
+    #### Used to update details of a Release.
+
+    **TYPE:** PUT
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `releaseId: int`
+    - `versionName: string`
+    - `versionCode: int`
+    - `hidden: int`
+    - `data: string`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Empty parameters in Request Body_
+
+    - **BadRequest (400):** _Illegal values provided!_
+
+    - **BadRequest (400):** _Hiddden parameter must have a 'true' or 'false' value_
+
+    - **BadRequest (400):** _Release Id must be an Integer._
+
+    - **BadRequest (400):** _Version Code must be an Integer._
+
+    - **Unauthorized (401):** _Unauthorized update!_
+
+    - **OK (200):** _`Release Details updated successfully!`_
+
+
+
 ## 4. Release
+
+These endpoints are Release-specific, in the manner that they are concerned about managing and publishing of a specific Release. 
+
+* ### `/api/getReleaseNotes`    _[Unprotected Endpoint]_
+
+    #### Used to get Release Notes for a Release.
+
+    **NOTE:** This endpointis an unprotected endpoint, i.e, no authentication is required to access it.
+
+    This API supports fetching Release Notes via 2 methods, ordered by precedence:
+
+    1. Directly by Release ID
+    2. By App ID and Version Code _(Note that you can also use the "latest" keyword in `versionCode` to automatically select the Release with the highest Version Code for given `appId`)_
+
+    **TYPE:** GET
+
+    **Headers:**
+
+    NONE
+
+    **Parameters:**
+
+    - `releaseId: int`
+    - `appId: int`
+    - `versionCode: int`
+    - `hidden: int`
+    - `data: string`
+
+    **Response:**
+
+    - **BadRequest (400):** _Missing Parameters!_
+
+    - **BadRequest (400):** _Illegal Release ID_
+
+    - **BadRequest (400):** _Release ID must be an Integer!_
+
+    - **BadRequest (400):** _Illegal App ID or Version Code_
+
+    - **BadRequest (400):** _App ID must be an Integer!_
+
+    - **BadRequest (400):** _Invalid Version Code_
+
+    - **NotFound (404):** _Release Notes not found!_
+
+    - **OK (200):** _`{versionCode: <code>, versionName: <name>, notesTxt: <txt>, notesMd: <md>, notesHtml: <html>, updatedAt: <timestamp>}`_
+
+
+
+* ### `/api/updateReleaseNotes`
+
+    #### Used to update Release Notes of a Release.
+
+    **TYPE:** PUT
+
+    **Headers:**
+
+    - Authorization Bearer : `authToken`
+
+    **Parameters:**
+
+    - `releaseId: int`
+    - `notesTxt: string`
+    - `notesMd: string`
+    - `notesHtml: string`
+
+    **Response:**
+
+    - **Unauthorized (401):** _Auth token missing!_
+
+    - **Unauthorized (401):** _Invalid Auth Token_
+
+    - **BadRequest (400):** _Missing Release ID_
+
+    - **BadRequest (400):** _Illegal values for Release ID provided!_
+
+    - **BadRequest (400):** _Release Id must be an Integer._
+
+    - **Unauthorized (401):** _Unauthorized update!_
+
+    - **OK (200):** _`Release Notes updated successfully!`_
