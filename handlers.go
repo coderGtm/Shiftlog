@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -511,7 +510,7 @@ func getReleaseNotes(c *gin.Context) {
 			c.IndentedJSON(http.StatusNotFound, "Release Notes not found!")
 			return
 		}
-		fmt.Print("rel:", releaseNotes)
+		
 		c.IndentedJSON(http.StatusOK, releaseNotes)
 		return
 	} else if appId != "" && versionCode != "" {
