@@ -1,8 +1,8 @@
 # release.io
 
-A fast, efficient and secure system to create, manage and publish Release Notes for your apps/products.
+A fast, efficient, and secure system to create, manage, and publish Release Notes for your apps/products.
 
-🚀 Blazingly Fast APIs wriiten in Go
+🚀 Blazingly Fast APIs written in Go
 
 🔖 Supports Release Notes in multiple formats *(Plain Text, Markdown and HTML)*
 
@@ -12,7 +12,7 @@ A fast, efficient and secure system to create, manage and publish Release Notes 
 
 ## 🛠️ Getting Started
 
-release.io is available as an API system which can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
+release.io is available as an API system that can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
 
 #### Prerequisites
 
@@ -52,7 +52,7 @@ go run .
 
 #### Access the Application
 
-By default, the application (api) runs on port 8080. Access it via Postman or curl with base URL [http://localhost:8080](http://localhost:8080).
+By default, the application (API) runs on port 8080. Access it via Postman or curl with the base URL [http://localhost:8080](http://localhost:8080).
 
 
 ## 🚀 Deployment
@@ -71,7 +71,7 @@ Once logged in, users can create and manage their applications, defining specifi
 
 ### 3. Versioning and Release Notes:
 
-Within each application, users can create and manage multiple releases. For each release, they can attach release notes in their preferred format (txt, md, html).
+Within each application, users can create and manage multiple releases. For each release, they can attach release notes in their preferred format (text, MD, HTML).
 
 ### 4. Browsing and Exporting Release Notes:
 
@@ -83,7 +83,7 @@ Users can easily browse and view release notes associated with their application
     release.io streamlines the process of creating, updating, and managing release notes, saving valuable time for developers and product teams.
 
 - ### Customizable Formats:
-    The system accommodates different documentation styles with support for txt, md, and html formats, catering to a wide range of user preferences.
+    The system accommodates different documentation styles with support for text, md, and HTML formats, catering to a wide range of user preferences.
 
 - ### Organized Versioning:
     Through intuitive version management, users can easily track the evolution of their applications and associated release notes.
@@ -99,8 +99,8 @@ Users can easily browse and view release notes associated with their application
 
 * [Gin](https://github.com/gin-gonic/gin) - Gin is a web framework written in Go. It features a martini-like API with performance that is up to 40 times faster
 * [jwt-go](https://github.com/golang-jwt/jwt/v5) - A go implementation of JSON Web Tokens.
-* [go-sqlite3](https://github.com/mattn/go-sqlite3) - A sqlite3 driver that conforms to the built-in database/sql interface.
-* [bluemonday](https://github.com/microcosm-cc/bluemonday) - bluemonday is a HTML sanitizer implemented in Go. It is fast and highly configurable.
+* [go-sqlite3](https://github.com/mattn/go-sqlite3) - A SQLite3 driver that conforms to the built-in database/SQL interface.
+* [bluemonday](https://github.com/microcosm-cc/bluemonday) - bluemonday is an HTML sanitizer implemented in Go. It is fast and highly configurable.
 * [Go Cryptography](https://golang.org/x/crypto) - This repository holds supplementary Go cryptography libraries.
 
 ## 🌱 Contributing
