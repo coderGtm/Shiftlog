@@ -15,16 +15,16 @@ var htmlStripper *bluemonday.Policy
 var notesSanitizer *bluemonday.Policy
 
 func main() {
-	db, dbErr = sql.Open("sqlite3", "sqlite3.db")
-	checkErr(dbErr)
-	defer db.Close()
-	_, dbErr = db.Exec("PRAGMA foreign_keys = ON;")
-	checkErr(dbErr)
-
 	htmlStripper = bluemonday.StrictPolicy()
 	notesSanitizer = bluemonday.UGCPolicy()
 	err := godotenv.Load(".env")
 	checkErr(err)
+
+	db, dbErr = sql.Open("sqlite3", os.Getenv("DATABASE_PATH"))
+	checkErr(dbErr)
+	defer db.Close()
+	_, dbErr = db.Exec("PRAGMA foreign_keys = ON;")
+	checkErr(dbErr)
 
 	router := gin.Default()
 
