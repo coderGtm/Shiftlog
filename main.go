@@ -15,7 +15,7 @@ var htmlStripper *bluemonday.Policy
 var notesSanitizer *bluemonday.Policy
 
 func main() {
-	db, dbErr = sql.Open("sqlite3", "development.db")
+	db, dbErr = sql.Open("sqlite3", "sqlite3.db")
 	checkErr(dbErr)
 	defer db.Close()
 	_, dbErr = db.Exec("PRAGMA foreign_keys = ON;")
@@ -30,5 +30,8 @@ func main() {
 
 	setUpRoutes(router)
 
+	if os.Getenv("PORT") == "" {
+		router.Run(":8080")
+	}
 	router.Run(":" + os.Getenv("PORT"))
 }
