@@ -18,6 +18,7 @@ type createAccountSuccessResponse struct {
 	AuthToken string `json:"authToken"`
 }
 type loginSuccessResponse struct {
+	Username  string `json:"username"`
 	AuthToken string `json:"authToken"`
 }
 type passwordUpdateSuccessResponse struct {

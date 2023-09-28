@@ -144,7 +144,7 @@ As the name suggests, these endpoints are used for all Authentication related st
 
     - 🚫 **Unauthorized (401):** _Invalid login credentials!_
 
-    - ✅ **OK (200):** _`{authToken: <authToken>}`_
+    - ✅ **OK (200):** _`{username: "<username>", authToken: <authToken>}`_
 
 
 

@@ -161,6 +161,7 @@ func login(c *gin.Context) {
 		return
 	} else {
 		data := loginSuccessResponse{
+			Username: username,
 			AuthToken: authToken,
 		}
 		c.IndentedJSON(http.StatusOK, data)
