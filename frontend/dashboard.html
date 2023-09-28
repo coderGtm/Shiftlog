@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<body>
+    <!-- A responsive header(nav) with title release.io and a profile icon and a logout icon. everything should be visible on mobile device also. use fontawesome icons -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><strong>release.io</strong></a>
+          <div class="d-flex">
+            <a href="#" class="btn btn-outline-light me-2"><i class="fas fa-user"></i></a>
+            <a href="#" class="btn btn-outline-light"><i class="fas fa-sign-out-alt"></i></a>
+          </div>
+        </div>
+      </nav>
+    
+    <!-- A welcome username message and a larger Dashboard title -->
+    <div class="container my-5">
+        <h2>Welcome, <span id="username"></span></h2>
+        <h1><strong>Dashboard</strong></h1>
+    </div>
+
+    <!-- A heading of "My Apps" followed by a table of all apps with columns serial no, name, hidden, and last modified. clicking on an app takes us to that app's page -->
+    <div class="container my-5">
+        <h2>My Apps</h2>
+    </div>
+    <div class="container my-5">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">S.No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Hidden</th>
+                <th scope="col">Last Modified</th>
+              </tr>
+            </thead>
+            <tbody id="apps">
+            </tbody>
+          </table>
+    </div>
+
+    <script src="logic/dashboard.js"></script>
+
+</body>
+</html>

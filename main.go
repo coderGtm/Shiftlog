@@ -28,6 +28,9 @@ func main() {
 
 	router := gin.Default()
 
+	router.Static("/logic", "frontend/logic")
+	router.LoadHTMLGlob("frontend/*.html")
+
 	setUpRoutes(router)
 
 	if os.Getenv("PORT") == "" {
