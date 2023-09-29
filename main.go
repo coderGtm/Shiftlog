@@ -29,6 +29,7 @@ func main() {
 	router := gin.Default()
 
 	router.Static("/logic", "frontend/logic")
+	router.Static("/style", "frontend/style")
 	router.LoadHTMLGlob("frontend/*.html")
 
 	setUpRoutes(router)

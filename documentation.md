@@ -202,7 +202,7 @@ These endpoints are typically to be consumed by the Dashboard of a frontend, hen
 
 * ### ➕ `/api/createApp`
 
-    #### Used to get list of all apps of a user.
+    #### Used to create a new app for a user.
 
     **TYPE:** POST
 
