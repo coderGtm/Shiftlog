@@ -590,3 +590,26 @@ func updateReleaseNotes(c *gin.Context) {
 	}
 	c.IndentedJSON(http.StatusUnauthorized, "Unauthorized update!")
 }
+
+
+
+// frontend
+
+func getSignupPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "signup.html", nil)
+}
+func getLoginPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.html", nil)
+}
+func getDashboardPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "dashboard.html", nil)
+}
+func getProfilePage(c *gin.Context) {
+	c.HTML(http.StatusOK, "profile.html", nil)
+}
+func getAppPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "app.html", nil)
+}
+func getReleasePage(c *gin.Context) {
+	c.HTML(http.StatusOK, "release.html", nil)
+}

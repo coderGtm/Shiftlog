@@ -49,6 +49,7 @@ function fetchDashboardData() {
                         var id = response[this.rowIndex - 1].id;
                         window.location.href = "/app/" + id;
                     }
+                    row.style.cursor = "pointer";
                 }
             }
             else if (xhr.status == 401) {

@@ -1,10 +1,7 @@
 package main
 
-import (
-	"net/http"
+import "github.com/gin-gonic/gin"
 
-	"github.com/gin-gonic/gin"
-)
 
 func setUpRoutes(router *gin.Engine) {
 	api := router.Group("api")
@@ -34,13 +31,10 @@ func setUpRoutes(router *gin.Engine) {
 
 	frontend := router.Group("/")
 
-	frontend.GET("signup", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "signup.html", nil)
-	})
-	frontend.GET("login", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "login.html", nil)
-	})
-	frontend.GET("dashboard", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "dashboard.html", nil)
-	})
+	frontend.GET("signup", getSignupPage)
+	frontend.GET("login", getLoginPage)
+	frontend.GET("dashboard", getDashboardPage)
+	frontend.GET("profile", getProfilePage)
+	frontend.GET("app", getAppPage)
+	frontend.GET("release", getReleasePage)
 }
