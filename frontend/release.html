@@ -31,10 +31,41 @@
     <!-- Display Release Notes Here in all formats (txt, md, html) -->
     <div class="container my-5">
         <h3>Release Notes</h3>
-        <p id="releaseNotes"></p>
+        
+        <div class="card">
+            <div class="card-body">
+                <h3>Text</h3>
+                <div id="releaseNotesText">
+                    <pre></pre>
+                </div>
+
+                <h3>Markdown</h3>
+
+                <div id="releaseNotesMarkdown">
+                    <pre></pre>
+                </div>
+
+                <h3>HTML</h3>
+
+                <div id="releaseNotesHTML">
+                    <pre></pre>
+                </div>
+            </div>
+            <div class="card-footer">
+                <p>Last Modified: <span id="lastModified"></span></p>
+
+                <p>Version Code: <span id="versionCode"></span></p>
+
+                <p>Version Name: <span id="versionName"></span></p>
+
+                <p>Hidden: <span id="hidden"></span></p>
+
+                <p>App: <span id="appName"></span></p>
+
+            </div>
+        </div>
     </div>
     
-
 
     <!-- Modal to Delete Release -->
     <div class="modal fade" id="delete-release-modal" tabindex="-1" aria-labelledby="delete-release-modal-label" aria-hidden="true">
