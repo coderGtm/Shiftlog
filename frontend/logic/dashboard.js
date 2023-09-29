@@ -44,10 +44,12 @@ function fetchDashboardData() {
                     var strTime = hours + ':' + minutes + ' ' + ampm;
                     cell3.innerHTML = updatedAt.toDateString() + " " + strTime;
 
-                    // make row clickable and redirect to /app/<id>
+                    // make row clickable and redirect to /app?id=<id>?name=<name>
                     row.onclick = function() {
                         var id = response[this.rowIndex - 1].id;
-                        window.location.href = "/app/" + id;
+                        var name = response[this.rowIndex - 1].name;
+                        var urlEncodedQuery = "?id=" + encodeURIComponent(id) + "&name=" + encodeURIComponent(name);
+                        window.location.href = "/app" + urlEncodedQuery;
                     }
                     row.style.cursor = "pointer";
                 }
@@ -81,9 +83,12 @@ function createApp() {
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                // redirect to /app/<id>
+                // redirect to /app?id=<id>?name=<name>
                 var response = JSON.parse(xhr.responseText);
-                window.location.href = "/app/" + response.id;
+                var id = response.id;
+                var name = response.name;
+                var urlEncodedQuery = "?id=" + encodeURIComponent(id) + "&name=" + encodeURIComponent(name);
+                window.location.href = "/app" + urlEncodedQuery;
             } else {
                 alert("Error creating app! " + xhr.responseText);
             }

@@ -298,7 +298,7 @@ These endpoints are typically to be consumed by the Dashboard of a frontend, hen
 
 These are App-specific APIs, typically used to present an "App page" by a frontend, hence the classification.
 
-* ### 🔄 `/api/getRelease`
+* ### 🔄 `/api/getReleases`
 
     #### Used to get Releases of an App.
 
