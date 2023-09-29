@@ -9,33 +9,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-     <!-- A responsive header(nav) with title release.io and a profile icon and a logout icon. everything should be visible on mobile device also. use fontawesome icons -->
-     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><strong>release.io</strong></a>
-          <div class="d-flex">
-            <a href="/profile" class="btn btn-outline-light me-2"><i class="fas fa-user"></i></a>
-            <a onclick="logout()" class="btn btn-outline-light"><i class="fas fa-sign-out-alt"></i></a>
-          </div>
-        </div>
-      </nav>
-
-      <div class="container my-5">
-        <h3><strong>App Name</strong></h3>
-        <br><br>
-        <div class="d-flex justify-content-between">
-            <h2>App Releases</h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-release-modal">Create Releases</button>
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><strong>release.io</strong></a>
+      <div class="d-flex">
+        <a href="/profile" class="btn btn-outline-light me-2"><i class="fas fa-user"></i></a>
+        <a onclick="logout()" class="btn btn-outline-light"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
     </div>
+  </nav>
+
+    <div class="container my-5">
+        <h2><strong>App Name</strong></h2>
+    </div>
+
+    <div class="container my-3">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-app-modal">Delete App</button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update-app-modal">Update App</button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create-release-modal">Create Release</button>
+  </div>
+
+    <!-- Display App Releases Here in table -->
     <div class="container my-5">
         <table id="releaseTable" class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">S.No.</th>
-                <th scope="col">Version Name</th>
                 <th scope="col">Version Code</th>
-                <th scope="col">Hidden</th>
+                <th scope="col">Version Name</th>
+                <th scope="col">Release Notes</th>
                 <th scope="col">Last Modified</th>
               </tr>
             </thead>
@@ -51,6 +53,75 @@
             </tbody>
           </table>
     </div>
-    
+
+    <!-- Modal to Delete App -->
+    <div class="modal fade" id="delete-app-modal" tabindex="-1" aria-labelledby="delete-app-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5>Are you sure you want to delete this app? All releases will be deleted permanently. This action is irreversible!</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="deleteApp()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to Update App Details -->
+    <div class="modal fade" id="update-app-modal" tabindex="-1" aria-labelledby="update-app-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="update-app-modal-label">Update App Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateAppForm" action="javascript:updateApp()">
+                        <div class="mb-3">
+                            <label for="appName" class="form-label">App Name</label>
+                            <input type="text" class="form-control" id="appName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="hidden" class="form-label">Hidden</label>
+                            <input type="checkbox" class="form-check-input" id="hidden">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to Create Release -->
+    <div class="modal fade" id="create-release-modal" tabindex="-1" aria-labelledby="create-release-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="create-release-modal-label">Create Release</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createReleaseForm" action="javascript:createRelease()">
+                        <div class="mb-3">
+                            <label for="versionCode" class="form-label">Version Code</label>
+                            <input type="text" class="form-control" id="versionCode" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="versionName" class="form-label">Version Name</label>
+                            <input type="text" class="form-control" id="versionName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="releaseNotes" class="form-label">Release Notes</label>
+                            <textarea class="form-control" id="releaseNotes" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="logic/app.js"></script>
 </body>
 </html>
