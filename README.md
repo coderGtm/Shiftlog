@@ -1,3 +1,5 @@
+![Header](release.io.png)
+
 # release.io
 
 A fast, efficient, and secure system to create, manage, and publish Release Notes for your apps/products.
