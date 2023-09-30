@@ -22,7 +22,7 @@ func getReleaseNotesOfRelease(releaseId int) (releaseNotes, bool) {
 	var NotesMd string
 	var NotesHtml string
 	var UpdatedAt string
-	err := db.QueryRow("SELECT versionCode, versionName, notesTxt, notesMd, notesHtml, updatedAt from release WHERE id = ? AND hidden = 0", releaseId).Scan(&VersionCode, &VersionName, &NotesTxt, &NotesMd, &NotesHtml, &UpdatedAt)
+	err := db.QueryRow("SELECT versionCode, versionName, COALESCE(notesTxt, ''), COALESCE(notesMd, ''), COALESCE(notesHtml, ''), updatedAt from release WHERE id = ? AND hidden = 0", releaseId).Scan(&VersionCode, &VersionName, &NotesTxt, &NotesMd, &NotesHtml, &UpdatedAt)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			// a real error happened!
