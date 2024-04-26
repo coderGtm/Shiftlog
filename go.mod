@@ -1,4 +1,4 @@
-module github.com/coderGtm/release.io
+module github.com/coderGtm/Shiftlog
 
 go 1.21.0
 

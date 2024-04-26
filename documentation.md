@@ -1,6 +1,6 @@
-## 📋 This Page documents the APIs provided by release.io
+## 📋 This Page documents the APIs provided by Shiftlog
 
-release.io features a set of APIs to easily create, manage, and publish Release Notes for your apps/products. The APIs are divided into 4 major parts:
+Shiftlog features a set of APIs to easily create, manage, and publish Release Notes for your apps/products. The APIs are divided into 4 major parts:
 
 ## 1. 🔐 Auth
 

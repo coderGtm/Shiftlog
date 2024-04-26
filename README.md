@@ -1,6 +1,6 @@
-![Header](release.io.png)
+![Header](/Shiftlog.png)
 
-# release.io
+# Shiftlog
 
 A fast, efficient, and secure system to create, manage, and publish Release Notes for your apps/products.
 
@@ -10,24 +10,24 @@ A fast, efficient, and secure system to create, manage, and publish Release Note
 
 🔒 Fully Secure Backend with JWT Auth Tokens
 
-![flowchart](https://github.com/coderGtm/release.io/assets/66418526/827e98d1-be10-4fdb-bff6-00b8283148bb)
+![flowchart](https://github.com/coderGtm/Shiftlog/assets/66418526/827e98d1-be10-4fdb-bff6-00b8283148bb)
 
 ## 🛠️ Getting Started
 
-release.io is available as an API system that can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
+Shiftlog is available as an API system that can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
 
 #### Prerequisites
 
 - **Go (Golang):** Ensure you have Go installed on your system. You can download it from [https://golang.org/dl/](https://golang.org/dl/).
 
-- **SQLite3:** release.io requires SQLite3. If not already installed, download it from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html) and follow the installation instructions for your platform.
+- **SQLite3:** Shiftlog requires SQLite3. If not already installed, download it from [https://www.sqlite.org/download.html](https://www.sqlite.org/download.html) and follow the installation instructions for your platform.
 
 #### Clone the Repository
 
 Open your terminal or command prompt and navigate to your desired installation directory. Clone the repository:
 
 ```shell
-git clone https://github.com/coderGtm/release.io.git
+git clone https://github.com/coderGtm/Shiftlog.git
 ```
 
 #### Set Environment Variables
@@ -82,7 +82,7 @@ Users can easily browse and view release notes associated with their application
 ## ✅ Benefits
 
 - ### Efficient Documentation: 
-    release.io streamlines the process of creating, updating, and managing release notes, saving valuable time for developers and product teams.
+    Shiftlog streamlines the process of creating, updating, and managing release notes, saving valuable time for developers and product teams.
 
 - ### Customizable Formats:
     The system accommodates different documentation styles with support for text, md, and HTML formats, catering to a wide range of user preferences.
@@ -95,7 +95,7 @@ Users can easily browse and view release notes associated with their application
 
 ## 📝 API Documentation
 
-***Please see [documentation.md](documentation.md) for a detailed API Documentation of release.io***
+***Please see [documentation.md](documentation.md) for a detailed API Documentation of Shiftlog***
 
 ## 🔍 Built With
 
