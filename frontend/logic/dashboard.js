@@ -23,6 +23,9 @@ function fetchDashboardData() {
                 var response = JSON.parse(xhr.responseText);
                 // response format is like [{id:<id>, name: <name>, hidden: [true/false], createdAt: <timestamp>, updatedAt: <timestamp>}, ...]
                 var table = document.getElementById("appTable");
+                if (response.length == 0) {
+                    document.getElementById("noReleases").style.display = "block";
+                }
                 for (var i = 0; i < response.length; i++) {
                     var row = table.insertRow(i + 1);
                     // show serial no, name, hidden, and last modified
@@ -48,7 +51,8 @@ function fetchDashboardData() {
                     row.onclick = function() {
                         var id = response[this.rowIndex - 1].id;
                         var name = response[this.rowIndex - 1].name;
-                        var urlEncodedQuery = "?id=" + encodeURIComponent(id) + "&name=" + encodeURIComponent(name);
+                        var hidden = response[this.rowIndex - 1].hidden;
+                        var urlEncodedQuery = "?id=" + encodeURIComponent(id) + "&name=" + encodeURIComponent(name) + "&hidden=" + encodeURIComponent(hidden);
                         window.location.href = "/app" + urlEncodedQuery;
                     }
                     row.style.cursor = "pointer";

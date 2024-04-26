@@ -7,6 +7,8 @@ document.body.onload = function() {
 
     // Populate app name from query string
     document.querySelector("h2 strong").textContent = decodeURIComponent(getQueryString("name"));
+    document.getElementById("appName").value = decodeURIComponent(getQueryString("name"));
+    document.getElementById("hidden").checked = getQueryString("hidden") === "true";
 
     fetchReleases();
 }
@@ -24,29 +26,34 @@ function fetchReleases() {
                 // Parse JSON response and display in table
                 var response = JSON.parse(xhr.responseText);
                 var table = document.getElementById("releaseTable");
-                for (var i = 0; i < response.length; i++) {
-                    var row = table.insertRow(i + 1);
-                    // Show serial no, version code, version name, release notes, and last modified
-                    var cell0 = row.insertCell(0);
-                    cell0.innerHTML = i + 1;
-                    var cell1 = row.insertCell(1);
-                    cell1.innerHTML = response[i].versionCode;
-                    var cell2 = row.insertCell(2);
-                    cell2.innerHTML = response[i].versionName;
-                    var cell3 = row.insertCell(3);
-                    cell3.innerHTML = response[i].hidden;
-                    var cell4 = row.insertCell(4);
-                    // updatedAt is a timestamp, convert to readable date and time
-                    var updatedAt = new Date(response[i].updatedAt * 1000);
-                    cell4.innerHTML = updatedAt.toLocaleString();
-
-                    // Make row clickable and redirect to release page
-                    row.onclick = function() {
-                        var id = response[this.rowIndex - 1].id;
-                        var versionName = response[this.rowIndex - 1].versionName
-                        window.location.href = "/release?versionName=" + encodeURIComponent(versionName) + "&id=" + id;
-                    };
-                    row.style.cursor = "pointer";
+                if (response.length == 0) {
+                    document.getElementById("noReleases").style.display = "block";
+                }
+                else {
+                    for (var i = 0; i < response.length; i++) {
+                        var row = table.insertRow(i + 1);
+                        // Show serial no, version code, version name, release notes, and last modified
+                        var cell0 = row.insertCell(0);
+                        cell0.innerHTML = i + 1;
+                        var cell1 = row.insertCell(1);
+                        cell1.innerHTML = response[i].versionCode;
+                        var cell2 = row.insertCell(2);
+                        cell2.innerHTML = response[i].versionName;
+                        var cell3 = row.insertCell(3);
+                        cell3.innerHTML = response[i].hidden;
+                        var cell4 = row.insertCell(4);
+                        // updatedAt is a timestamp, convert to readable date and time
+                        var updatedAt = new Date(response[i].updatedAt * 1000);
+                        cell4.innerHTML = updatedAt.toLocaleString();
+    
+                        // Make row clickable and redirect to release page
+                        row.onclick = function() {
+                            var id = response[this.rowIndex - 1].id;
+                            var versionName = response[this.rowIndex - 1].versionName
+                            window.location.href = "/release?versionName=" + encodeURIComponent(versionName) + "&id=" + id;
+                        };
+                        row.style.cursor = "pointer";
+                    }
                 }
             } else if (xhr.status == 401) {
                 // Auth token expired or invalid, redirect to login page
@@ -65,7 +72,7 @@ function fetchReleases() {
 function deleteApp() {
     // Delete the app. API endpoint is /api/deleteApp and an auth token is required in the header
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/api/deleteApp", true);
+    xhr.open("DELETE", "/api/deleteApp?appId=" + getQueryString("id"), true);
     xhr.setRequestHeader("Authorization", "Bearer " + localStorage.getItem("authToken"));
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {

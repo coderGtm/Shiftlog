@@ -30,6 +30,7 @@ func main() {
 
 	router.Static("/logic", "frontend/logic")
 	router.Static("/style", "frontend/style")
+	router.Static("/assets", "frontend/assets")
 	router.LoadHTMLGlob("frontend/*.html")
 
 	setUpRoutes(router)

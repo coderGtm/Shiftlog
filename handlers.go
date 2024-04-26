@@ -242,9 +242,10 @@ func deleteApp(c *gin.Context) {
 	}
 
 	// get input id
-	appId := htmlStripper.Sanitize(c.PostForm("appId"))
+	appId := htmlStripper.Sanitize(c.Query("appId"))
+	println(appId)
 
-	if appId != c.PostForm("appId") {
+	if appId != c.Query("appId") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal app Id")
 		return
 	}
@@ -404,7 +405,6 @@ func deleteRelease(c *gin.Context) {
 		c.IndentedJSON(http.StatusUnauthorized, "Invalid Auth Token")
 		return
 	}
-
 	// get input id
 	releaseId := htmlStripper.Sanitize(c.Query("releaseId"))
 

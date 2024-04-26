@@ -90,12 +90,13 @@ function deleteRelease() {
     var authToken = localStorage.getItem("authToken");
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/api/deleteRelease?id=" + releaseId, true);
+    xhr.open("DELETE", "/api/deleteRelease?releaseId=" + encodeURIComponent(releaseId), true);
     xhr.setRequestHeader("Authorization", "Bearer " + authToken);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 // Release deleted successfully, you can redirect or show a success message
+                window.location.href = "/dashboard";
             } else if (xhr.status == 401) {
                 // auth token expired or invalid, redirect to login page
                 window.location.href = "/login";
