@@ -13,15 +13,15 @@ document.body.onload = function () {
 function fetchReleaseData() {
     // Fetch release data using an API call
     var releaseId = getReleaseIdFromQuery(); // Implement the function to get release ID from the URL query
-    var authToken = localStorage.getItem("authToken");
-
+    preservedReleaseId = releaseId;
+    
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/api/getReleaseNotes?releaseId=" + releaseId, true);
-    xhr.setRequestHeader("Authorization", "Bearer " + authToken);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 var releaseData = JSON.parse(xhr.responseText);
+                releaseId = releaseData.id;
                 updateReleasePage(releaseData);
             } else if (xhr.status == 401) {
                 // auth token expired or invalid, redirect to login page
@@ -35,54 +35,153 @@ function fetchReleaseData() {
 }
 
 function updateReleasePage(releaseData) {
+    console.log(releaseData);
     // Update page elements with fetched release data
-    document.getElementById("version").value = releaseData.name;
-    document.getElementById("versionCode").value = releaseData.versionCode;
-    document.getElementById("versionName").value = releaseData.versionName;
-    document.getElementById("hidden").checked = releaseData.hidden;
-    document.getElementById("releaseNotesText").textContent = releaseData.releaseNotesText;
-    document.getElementById("releaseNotesMarkdown").textContent = releaseData.releaseNotesMarkdown;
-    document.getElementById("releaseNotesHTML").innerHTML = releaseData.releaseNotesHTML;
-    document.getElementById("lastModified").textContent = releaseData.lastModified;
-    document.getElementById("appName").textContent = releaseData.appName;
+    document.getElementById("versionNameHeader").innerHTML = "<strong>"+releaseData.versionName+"</strong>"
+    document.getElementById("versionName").textContent = releaseData.versionName;
+    document.getElementById("uVersionCode").value = releaseData.versionCode;
+    document.getElementById("uVersionName").value = releaseData.versionName;
+    document.getElementById("versionCode").textContent = releaseData.versionCode;
+    document.getElementById("uHidden").checked = releaseData.hidden;
+    document.getElementById("hidden").textContent = releaseData.hidden ? "Yes" : "No";
+    document.getElementById("data").textContent = releaseData.data;
+    document.getElementById("remarks").textContent = releaseData.data;
+    document.getElementById("api").textContent = "/api/getReleaseNotes?releaseId=" + releaseData.id;
+
+    // updatedAt is a timestamp, the number of seconds elapsed since January 1, 1970 UTC, convert to readable date and time in am pm format
+    var updatedAt = new Date(releaseData.updatedAt * 1000);
+    var hours = updatedAt.getHours();
+    var minutes = updatedAt.getMinutes();
+    var ampm = hours >= 12 ? 'pm' : 'am';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0'+minutes : minutes;
+    var strTime = hours + ':' + minutes + ' ' + ampm;
+    document.getElementById("lastModified").textContent = updatedAt.toDateString() + " " + strTime;
+
+    setReleaseNotes(releaseData);
+}
+
+function setReleaseNotes(releaseData) {
+    var rTxt = releaseData.notesTxt;
+    var rMd = releaseData.notesMd;
+    var rHtml = releaseData.notesHtml;
+    
+    var txtDiv = document.getElementById("releaseNotesText");
+    var mdDiv = document.getElementById("releaseNotesMarkdown");
+    var htmlDiv = document.getElementById("releaseNotesHTML");
+
+    if (rTxt == null || rTxt == "") {
+        txtDiv.innerHTML = "<em>No release notes provided!</em>";
+        document.getElementById("text-edit").textContent = "";
+    }
+    else {
+        txtDiv.innerHTML = "<pre>"+rTxt+"</pre>";
+        document.getElementById("text-edit").textContent = rTxt;
+    }
+
+    if (rMd == null || rMd == "") {
+        mdDiv.innerHTML = "<em>No release notes provided!</em>";
+        document.getElementById("markdown-edit").textContent = "";
+    }
+    else {
+        mdDiv.innerHTML = "<md-block>"+rMd+"</md-block>";
+        document.getElementById("markdown-edit").textContent = rMd;
+    }
+
+    if (rHtml == null || rHtml == "") {
+        htmlDiv.innerHTML = "<em>No release notes provided!</em>";
+        document.getElementById("html-edit").textContent = "";
+    }
+    else {
+        htmlDiv.innerHTML = "<iframe srcdoc='"+rHtml+"' onload='resizeIframe(this)'></iframe>";
+        document.getElementById("html-edit").textContent = rHtml;
+    }
+
+    sessionStorage.setItem("rTxt", rTxt);
+    sessionStorage.setItem("rMd", rMd);
+    sessionStorage.setItem("rHtml", rHtml);
 }
 
 function updateRelease() {
-    var releaseId = getReleaseIdFromQuery(); // Implement the function to get release ID from the URL query
-    var version = document.getElementById("version").value;
-    var versionCode = document.getElementById("versionCode").value;
-    var versionName = document.getElementById("versionName").value;
-    var hidden = document.getElementById("hidden").checked;
-    var releaseNotes = document.getElementById("releaseNotes").value;
-
-    // Prepare data for update
-    var updateData = {
-        version: version,
-        versionCode: versionCode,
-        versionName: versionName,
-        hidden: hidden,
-        releaseNotes: releaseNotes
-    };
+    var versionCode = document.getElementById("uVersionCode").value;
+    var versionName = document.getElementById("uVersionName").value;
+    var hidden = document.getElementById("uHidden").checked;
+    var data = document.getElementById("data").value;
 
     var authToken = localStorage.getItem("authToken");
 
     var xhr = new XMLHttpRequest();
-    xhr.open("PUT", "/api/updateRelease?id=" + releaseId, true);
-    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.open("PUT", "/api/updateRelease", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.setRequestHeader("Authorization", "Bearer " + authToken);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 // Release updated successfully, you can redirect or show a success message
+                alert("Release updated successfully!");
+                window.location.reload();
             } else if (xhr.status == 401) {
                 // auth token expired or invalid, redirect to login page
+                alert("Session expired, please login again!");
                 window.location.href = "/login";
             } else {
                 alert("Error updating release! " + xhr.responseText);
             }
         }
     };
-    xhr.send(JSON.stringify(updateData));
+    var params = "releaseId=" + preservedReleaseId + "&versionCode=" + versionCode + "&versionName=" + versionName + "&hidden=" + hidden + "&data=" + data;
+    xhr.send(params);
+}
+
+function updateText() {
+    var rTxt = document.getElementById("text-edit").value;
+    var rMd = sessionStorage.getItem("rMd");
+    var rHtml = sessionStorage.getItem("rHtml");
+
+    updateReleaseNotes(rTxt, rMd, rHtml);
+}
+
+function updateMarkdown() {
+    var rTxt = sessionStorage.getItem("rTxt");
+    var rMd = document.getElementById("markdown-edit").value;
+    var rHtml = sessionStorage.getItem("rHtml");
+
+    updateReleaseNotes(rTxt, rMd, rHtml);
+}
+
+function updateHtml() {
+    var rTxt = sessionStorage.getItem("rTxt");
+    var rMd = sessionStorage.getItem("rMd");
+    var rHtml = document.getElementById("html-edit").value;
+
+    updateReleaseNotes(rTxt, rMd, rHtml);
+}
+
+function updateReleaseNotes(rTxt, rMd, rHtml) {
+    var authToken = localStorage.getItem("authToken");
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("PUT", "/api/updateReleaseNotes", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Authorization", "Bearer " + authToken);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // Release updated successfully, you can redirect or show a success message
+                alert("Release notes updated successfully!");
+                window.location.reload();
+            } else if (xhr.status == 401) {
+                // auth token expired or invalid, redirect to login page
+                alert("Session expired, please login again!");
+                window.location.href = "/login";
+            } else {
+                alert("Error updating release notes! " + xhr.responseText);
+            }
+        }
+    };
+    var params = "releaseId=" + preservedReleaseId + "&notesTxt=" + rTxt + "&notesMd=" + rMd + "&notesHtml=" + rHtml;
+    xhr.send(params);
 }
 
 function deleteRelease() {
@@ -130,3 +229,11 @@ function getQueryString(field) {
     var string = reg.exec(href);
     return string ? string[1] : null;
 }
+
+function resizeIframe(obj) {
+
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+
+  }
+
+var preservedReleaseId = -1;

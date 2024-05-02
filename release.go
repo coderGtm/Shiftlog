@@ -7,12 +7,15 @@ import (
 )
 
 type releaseNotes struct {
+	ReleaseId   int    `json:"id"`
 	VersionCode int    `json:"versionCode"`
 	VersionName string `json:"versionName"`
 	NotesTxt    string `json:"notesTxt"`
 	NotesMd     string `json:"notesMd"`
 	NotesHtml   string `json:"notesHtml"`
-	UpdatedAt   string  `json:"updatedAt"`
+	Hiddden     bool   `json:"hidden"`
+	Data        string `json:"data"`
+	UpdatedAt   string `json:"updatedAt"`
 }
 
 func getReleaseNotesOfRelease(releaseId int) (releaseNotes, bool) {
@@ -21,24 +24,30 @@ func getReleaseNotesOfRelease(releaseId int) (releaseNotes, bool) {
 	var NotesTxt string
 	var NotesMd string
 	var NotesHtml string
+	var Hiddden bool
+	var Data string
 	var UpdatedAt string
-	err := db.QueryRow("SELECT versionCode, versionName, COALESCE(notesTxt, ''), COALESCE(notesMd, ''), COALESCE(notesHtml, ''), updatedAt from release WHERE id = ? AND hidden = 0", releaseId).Scan(&VersionCode, &VersionName, &NotesTxt, &NotesMd, &NotesHtml, &UpdatedAt)
+	err := db.QueryRow("SELECT versionCode, versionName, COALESCE(notesTxt, ''), COALESCE(notesMd, ''), COALESCE(notesHtml, ''), hidden, COALESCE(data, ''), updatedAt from release WHERE id = ?;", releaseId).Scan(&VersionCode, &VersionName, &NotesTxt, &NotesMd, &NotesHtml, &Hiddden, &Data, &UpdatedAt)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			// a real error happened!
 			checkErr(err)
 		}
+		println(err.Error())
 		// record does not exist
 		return releaseNotes{}, false
 	}
 	// record exists
 	return releaseNotes{
+		ReleaseId:   releaseId,
 		VersionCode: VersionCode,
 		VersionName: VersionName,
-		NotesTxt: NotesTxt,
-		NotesMd: NotesMd,
-		NotesHtml: NotesHtml,
-		UpdatedAt: UpdatedAt,
+		NotesTxt:    NotesTxt,
+		NotesMd:     NotesMd,
+		NotesHtml:   NotesHtml,
+		Hiddden:     Hiddden,
+		Data:        Data,
+		UpdatedAt:   UpdatedAt,
 	}, true
 }
 
@@ -47,13 +56,13 @@ func getReleaseNotesByAppIdAndVersionCode(appId int, versionCode int, latestFlag
 	notes := new(releaseNotes)
 	var err error
 	if !latestFlag {
-		err = db.QueryRow("SELECT versionCode, versionName, notesTxt, notesMd, notesHtml, updatedAt from release WHERE appId = ? AND versionCode = ? AND hidden = 0", appId, versionCode).Scan(&notes.VersionCode, &notes.VersionName, &notes.NotesTxt, &notes.NotesMd, &notes.NotesHtml, &notes.UpdatedAt)
+		err = db.QueryRow("SELECT id, versionCode, versionName, notesTxt, notesMd, notesHtml, hidden, COALESCE(data, ''), updatedAt from release WHERE appId = ? AND versionCode = ? AND hidden = 0", appId, versionCode).Scan(&notes.ReleaseId, &notes.VersionCode, &notes.VersionName, &notes.NotesTxt, &notes.NotesMd, &notes.NotesHtml, &notes.Hiddden, &notes.Data, &notes.UpdatedAt)
 	} else {
 		maxVersionCode := getMaxVersionCodeOfApp(appId)
 		if maxVersionCode == -1 {
 			return *notes, false
 		}
-		err = db.QueryRow("SELECT versionCode, versionName, notesTxt, notesMd, notesHtml, updatedAt from release WHERE appId = ? AND versionCode = ? AND hidden = 0", appId, maxVersionCode).Scan(&notes.VersionCode, &notes.VersionName, &notes.NotesTxt, &notes.NotesMd, &notes.NotesHtml, &notes.UpdatedAt)
+		err = db.QueryRow("SELECT id, versionCode, versionName, notesTxt, notesMd, notesHtml, hidden, COALESCE(data, ''), updatedAt from release WHERE appId = ? AND versionCode = ? AND hidden = 0", appId, maxVersionCode).Scan(&notes.ReleaseId, &notes.VersionCode, &notes.VersionName, &notes.NotesTxt, &notes.NotesMd, &notes.NotesHtml, &notes.Hiddden, &notes.Data, &notes.UpdatedAt)
 	}
 	if err != nil {
 		if err != sql.ErrNoRows {
@@ -69,7 +78,7 @@ func getReleaseNotesByAppIdAndVersionCode(appId int, versionCode int, latestFlag
 
 func getMaxVersionCodeOfApp(appId int) int {
 	var versionCode int
-	err := db.QueryRow("SELECT MAX(versionCode) from release WHERE appId = ? AND hidden = 0", appId).Scan(&versionCode)
+	err := db.QueryRow("SELECT IFNULL(MAX(versionCode), 0) from release WHERE appId = ? AND hidden = 0", appId).Scan(&versionCode)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			// a real error happened!
@@ -78,6 +87,11 @@ func getMaxVersionCodeOfApp(appId int) int {
 		// record does not exist
 		return -1
 	}
+	//check if versionCode is null
+	if versionCode == 0 {
+		return -1
+	}
+
 	// record exists
 	return versionCode
 }

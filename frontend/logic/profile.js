@@ -13,6 +13,7 @@ function updateUsername() {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 var response = JSON.parse(xhr.responseText);
+                localStorage.setItem("username", username);
                 alert("Username updated successfully!");
                 // refresh page
                 window.location.reload();

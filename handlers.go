@@ -438,11 +438,13 @@ func updateRelease(c *gin.Context) {
 
 	// get sanatized parameters
 	// get input id
-	releaseId := htmlStripper.Sanitize(c.PostForm("releaseId"))
-	newName := htmlStripper.Sanitize(c.PostForm("versionName"))
-	newCode := htmlStripper.Sanitize(c.PostForm("versionCode"))
-	newHidden := htmlStripper.Sanitize(c.PostForm("hidden"))
-	data := htmlStripper.Sanitize(c.PostForm("data"))
+	releaseId := htmlStripper.Sanitize(c.Request.PostFormValue("releaseId"))
+	newName := htmlStripper.Sanitize(c.Request.PostFormValue("versionName"))
+	newCode := htmlStripper.Sanitize(c.Request.PostFormValue("versionCode"))
+	newHidden := htmlStripper.Sanitize(c.Request.PostFormValue("hidden"))
+	data := htmlStripper.Sanitize(c.Request.PostFormValue("data"))
+
+	println(releaseId, newName, newCode, newHidden, data)
 
 	// check for empty params
 	if strings.Trim(releaseId, " ") == "" || strings.Trim(newName, " ") == "" || strings.Trim(newHidden, " ") == "" || strings.Trim(newCode, " ") == "" {
@@ -451,7 +453,7 @@ func updateRelease(c *gin.Context) {
 	}
 
 	// check for illegal params
-	if newName != c.PostForm("versionName") || newCode != c.PostForm("versionCode") || newHidden != c.PostForm("hidden") || releaseId != c.PostForm("releaseId") || data != c.PostForm("data") {
+	if newName != c.Request.PostFormValue("versionName") || newCode != c.Request.PostFormValue("versionCode") || newHidden != c.Request.PostFormValue("hidden") || releaseId != c.Request.PostFormValue("releaseId") || data != c.Request.PostFormValue("data") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal values provided!")
 		return
 	}
@@ -560,10 +562,12 @@ func updateReleaseNotes(c *gin.Context) {
 
 	// get sanatized parameters
 	// get input id
-	releaseId := htmlStripper.Sanitize(c.PostForm("releaseId"))
-	notesTxt := htmlStripper.Sanitize(c.PostForm("notesTxt"))
-	notesMd := notesSanitizer.Sanitize(c.PostForm("notesMd"))
-	notesHtml := notesSanitizer.Sanitize(c.PostForm("notesHtml"))
+	releaseId := htmlStripper.Sanitize(c.Request.PostFormValue("releaseId"))
+	notesTxt := htmlStripper.Sanitize(c.Request.PostFormValue("notesTxt"))
+	notesMd := notesSanitizer.Sanitize(c.Request.PostFormValue("notesMd"))
+	notesHtml := notesSanitizer.Sanitize(c.Request.PostFormValue("notesHtml"))
+
+	println("notesTxt: ", notesTxt)
 
 	// check for empty params
 	if strings.Trim(releaseId, " ") == "" {
@@ -572,7 +576,7 @@ func updateReleaseNotes(c *gin.Context) {
 	}
 
 	// check for illegal params
-	if releaseId != c.PostForm("releaseId") {
+	if releaseId != c.Request.PostFormValue("releaseId") {
 		c.IndentedJSON(http.StatusBadRequest, "Illegal values for Release ID provided!")
 		return
 	}

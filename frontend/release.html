@@ -7,11 +7,32 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .releaseNotesDisplay {
+            border: 0 solid #ffffff;
+            background-color: ghostwhite;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        iframe{
+            width:100%;
+            height:100%;
+            overflow:hidden;
+            margin:0px;
+            padding:0px;
+            border:none;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="/dashboard"><strong>Shiftlog</strong></a>
+          <a class="navbar-brand" href="/dashboard"><h2><strong>Shiftlog</strong></h2></a>
           <div class="d-flex">
             <a href="/profile" class="btn btn-outline-light me-2"><i class="fas fa-user"></i></a>
             <a onclick="logout()" class="btn btn-outline-light"><i class="fas fa-sign-out-alt"></i></a>
@@ -20,7 +41,7 @@
       </nav>
 
     <div class="container my-5">
-        <h2 id="versionName"><strong>Release Name</strong></h2>
+        <h2 id="versionNameHeader"><strong>Release Name</strong></h2>
     </div>
 
     <div class="container my-3">
@@ -33,34 +54,48 @@
         <h3>Release Notes</h3>
         
         <div class="card">
-            <div class="card-body">
-                <h3>Text</h3>
-                <div id="releaseNotesText">
-                    <pre></pre>
-                </div>
+            <div class="card-header">
+                <p><strong>Last Modified:</strong> <span id="lastModified"></span></p>
 
-                <h3>Markdown</h3>
+                <p><strong>Version Code:</strong> <span id="versionCode"></span></p>
 
-                <div id="releaseNotesMarkdown">
-                    <pre></pre>
-                </div>
+                <p><strong>Version Name:</strong> <span id="versionName"></span></p>
 
-                <h3>HTML</h3>
+                <p><strong>Hidden:</strong> <span id="hidden"></span></p>
 
-                <div id="releaseNotesHTML">
-                    <pre></pre>
-                </div>
+                <p><strong>Remarks:</strong> <span id="remarks"></span></p>
+
+                <p><strong>API Endpoint:</strong> <code id="api"></code></p>
+
             </div>
-            <div class="card-footer">
-                <p>Last Modified: <span id="lastModified"></span></p>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h3>Text</h3>
+                    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#update-text-modal"><i class="fas fa-edit"></i></button>
+                </div>
+                <div id="releaseNotesText" class="releaseNotesDisplay my-3">
+                    <pre><em>Fetching...</em></pre>
+                </div>
 
-                <p>Version Code: <span id="versionCode"></span></p>
+                <br><hr><br>
 
-                <p>Version Name: <span id="versionName"></span></p>
+                <div class="d-flex justify-content-between">
+                    <h3>Markdown</h3>
+                    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#update-markdown-modal"><i class="fas fa-edit"></i></button>
+                </div>
+                <div id="releaseNotesMarkdown" class="releaseNotesDisplay my-3">
+                    <pre><em>Fetching...</em></pre>
+                </div>
 
-                <p>Hidden: <span id="hidden"></span></p>
+                <br><hr><br>
 
-                <p>App: <span id="appName"></span></p>
+                <div class="d-flex justify-content-between">
+                    <h3>HTML</h3>
+                    <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#update-html-modal"><i class="fas fa-edit"></i></button>
+                </div>
+                <div id="releaseNotesHTML" class="releaseNotesDisplay my-3">
+                    <pre><em>Fetching...</em></pre>
+                </div>
 
             </div>
         </div>
@@ -92,20 +127,20 @@
                 <div class="modal-body">
                     <form id="updateReleaseForm" action="javascript:updateRelease()">
                         <div class="mb-3">
-                            <label for="version" class="form-label">Version</label>
-                            <input type="text" class="form-control" id="version">
+                            <label for="uVersionName" class="form-label">Version Name</label>
+                            <input type="text" class="form-control" id="uVersionName">
                         </div>
                         <div class="mb-3">
-                            <label for="versionCode" class="form-label">Version Code</label>
-                            <input type="text" class="form-control" id="versionCode">
+                            <label for="uVersionCode" class="form-label">Version Code</label>
+                            <input type="text" class="form-control" id="uVersionCode">
                         </div>
                         <div class="mb-3">
-                            <label for="hidden" class="form-label">Hidden</label>
-                            <input type="checkbox" class="form-check-input" id="hidden">
+                            <label for="uHidden" class="form-label">Hidden</label>
+                            <input type="checkbox" class="form-check-input" id="uHidden">
                         </div>
                         <div class="mb-3">
-                            <label for="releaseNotes" class="form-label">Release Notes</label>
-                            <textarea class="form-control" id="releaseNotes" rows="5"></textarea>
+                            <label for="data" class="form-label">Remarks</label>
+                            <textarea class="form-control" id="data" rows="5"></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
@@ -114,6 +149,70 @@
         </div>
     </div>
 
+    <!--Modal to update Text Release Notes-->
+    <div class="modal fade" id="update-text-modal" tabindex="-1" aria-labelledby="update-text-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="update-text-modal-label">Update Text Release Notes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateTextForm" action="javascript:updateText()">
+                        <div class="mb-3">
+                            <label for="text-edit" class="form-label">Text</label>
+                            <textarea class="form-control" id="text-edit" rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal to update Markdown Release Notes-->
+    <div class="modal fade" id="update-markdown-modal" tabindex="-1" aria-labelledby="update-markdown-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="update-markdown-modal-label">Update Markdown Release Notes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateMarkdownForm" action="javascript:updateMarkdown()">
+                        <div class="mb-3">
+                            <label for="markdown-edit" class="form-label">Markdown</label>
+                            <textarea class="form-control" id="markdown-edit" rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal to update HTML Release Notes-->
+    <div class="modal fade" id="update-html-modal" tabindex="-1" aria-labelledby="update-html-modal-label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="update-html-modal-label">Update HTML Release Notes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateHtmlForm" action="javascript:updateHtml()">
+                        <div class="mb-3">
+                            <label for="html-edit" class="form-label">HTML</label>
+                            <textarea class="form-control" id="html-edit" rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
     <script src="logic/release.js"></script>
 </body>
 </html>

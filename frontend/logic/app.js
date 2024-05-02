@@ -6,9 +6,10 @@ document.body.onload = function() {
     }
 
     // Populate app name from query string
-    document.querySelector("h2 strong").textContent = decodeURIComponent(getQueryString("name"));
+    document.getElementById("appNameHeader").textContent = decodeURIComponent(getQueryString("name"));
     document.getElementById("appName").value = decodeURIComponent(getQueryString("name"));
     document.getElementById("hidden").checked = getQueryString("hidden") === "true";
+    document.getElementById("apiEndpoint").textContent = "/api/getReleaseNotes?appId=" + getQueryString("id") + "&versionCode=latest";
 
     fetchReleases();
 }
