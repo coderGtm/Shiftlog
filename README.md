@@ -54,7 +54,9 @@ go run .
 
 #### Access the Application
 
-By default, the application (API) runs on port 8080. You can access it via Postman or curl with the base URL [http://localhost:8080](http://localhost:8080). A very bare-bones and rather "incomplete" frontend is provided in the [frontend](frontend) directory which is routed to the base url scheme, i.e. you can access it via [http://localhost:8080/signup](http://localhost:8080/signup) scheme. It is **highly reccomended and maybe necessary** that you develop your custom frontend, while taking reference from what is provided. _As a side note, it would be great if you can update the frontend in this repo with your improved version._
+By default, the application (API) runs on port 8080. You can access it via Postman or curl with the base URL [http://localhost:8080](http://localhost:8080). A very bare-bones frontend is provided in the [frontend](frontend) directory which is routed to the base url scheme, i.e. you can access it via [http://localhost:8080/signup](http://localhost:8080/signup) scheme. It is **highly reccomended and maybe necessary** that you develop your custom frontend, while taking reference from what is provided. _As a side note, it would be great if you can update the frontend in this repo with your improved version._
+
+![Demo](/demo.png)
 
 
 ## 🚀 Deployment
