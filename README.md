@@ -14,7 +14,7 @@ A fast, efficient, and secure system to create, manage, and publish Release Note
 
 ## 🛠️ Getting Started
 
-Shiftlog is available as an API system that can be integrated into an existing server on a different port or deployed as a stand-alone microservice. A custom frontend is needed to access the Dashboard as of now.
+Shiftlog is available as an API system that can be integrated into an existing server on a different port or deployed as a stand-alone microservice.
 
 #### Prerequisites
 

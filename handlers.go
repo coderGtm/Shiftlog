@@ -599,6 +599,9 @@ func updateReleaseNotes(c *gin.Context) {
 
 // frontend
 
+func getHomePage(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", nil)
+}
 func getSignupPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "signup.html", nil)
 }

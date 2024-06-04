@@ -31,6 +31,7 @@ func setUpRoutes(router *gin.Engine) {
 
 	frontend := router.Group("/")
 
+	frontend.GET("", getHomePage)
 	frontend.GET("signup", getSignupPage)
 	frontend.GET("login", getLoginPage)
 	frontend.GET("dashboard", getDashboardPage)
